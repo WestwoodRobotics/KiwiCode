@@ -20,7 +20,7 @@ import frc.robot.Constants.ModuleConstants;
  * including motor control, encoder feedback, and state management.
  */
 public class SwerveModule {
-  private final CANSparkFlex drivingMotorController;
+  private final CANSparkMax drivingMotorController;
   private final CANSparkMax turningMotorController;
 
   private final RelativeEncoder drivingMotorEncoder;
@@ -40,7 +40,7 @@ public class SwerveModule {
    * @param chassisAngularOffset The angular offset of the module relative to the robot chassis.
    */
   public SwerveModule(int drivingCANId, int turningCANId, double chassisAngularOffset) {
-    drivingMotorController = new CANSparkFlex(drivingCANId, CANSparkFlex.MotorType.kBrushless);
+    drivingMotorController = new CANSparkMax(drivingCANId, CANSparkFlex.MotorType.kBrushless);
     turningMotorController = new CANSparkMax(turningCANId, CANSparkMax.MotorType.kBrushless);
 
     drivingMotorController.restoreFactoryDefaults();
