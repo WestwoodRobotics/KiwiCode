@@ -25,6 +25,6 @@ cd ..
 cd ..
 cd ..
 
-cd WPILib_Linux-2024.3.1
+cd WPILib_Linux-2024.3.2
 
 ./WPILibInstaller
