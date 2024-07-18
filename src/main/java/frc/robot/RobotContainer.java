@@ -1,29 +1,29 @@
+
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
-
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.PS4Controller.Button;
-import frc.robot.Constants.AutoConstants;
-import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.OIConstants;
-import frc.robot.subsystems.DriveSubsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import java.util.List;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.PortConstants;
+import frc.robot.commands.swerve.driveCommand;
+import frc.robot.subsystems.swerve.SwerveDrive;
+
+
+
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -32,11 +32,61 @@ import java.util.List;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  // The robot's subsystems
-  private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+
+  public final SwerveDrive m_robotDrive = new SwerveDrive();
+
+  // LED for indicating robot state, not implemented in hardware.
 
   // The driver's controller
-  XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+  XboxController m_driverController = new XboxController(PortConstants.kDriverControllerPort);
+  XboxController m_operatorController = new XboxController(PortConstants.kOperatorControllerPort);
+
+  private final JoystickButton DriverAButton = new JoystickButton(m_driverController, XboxController.Button.kA.value);
+  private final JoystickButton DriverBButton = new JoystickButton(m_driverController, XboxController.Button.kB.value);
+  private final JoystickButton DriverXButton = new JoystickButton(m_driverController, XboxController.Button.kX.value);
+  private final JoystickButton DriverYButton = new JoystickButton(m_driverController, XboxController.Button.kY.value);
+  private final JoystickButton DriverGyroButton = new JoystickButton(m_driverController, XboxController.Button.kStart.value);
+  private final JoystickButton OperatorStartButton = new JoystickButton(m_operatorController, XboxController.Button.kStart.value);
+
+
+  private final POVButton DriverDPadUp = new POVButton(m_driverController, 0);
+  private final POVButton DriverDPadRight = new POVButton(m_driverController, 90);
+  private final POVButton DriverDPadDown = new POVButton(m_driverController, 180);
+  private final POVButton DriverDPadLeft = new POVButton(m_driverController, 270);
+
+  private final JoystickButton DriverRightBumper = new JoystickButton(m_driverController,
+      XboxController.Button.kRightBumper.value);
+  private final JoystickButton DriverLeftBumper = new JoystickButton(m_driverController,
+      XboxController.Button.kLeftBumper.value);
+      
+  private final Trigger driverLeftTrigger = new Trigger(() -> m_driverController.getLeftTriggerAxis() > 0.5);
+  private final Trigger driverRightTrigger = new Trigger(() -> m_driverController.getRightTriggerAxis() > 0.5);
+
+  private final JoystickButton OperatorAButton = new JoystickButton(m_operatorController,
+      XboxController.Button.kA.value);
+  private final JoystickButton OperatorBButton = new JoystickButton(m_operatorController,
+      XboxController.Button.kB.value);
+  private final JoystickButton OperatorXButton = new JoystickButton(m_operatorController,
+      XboxController.Button.kX.value);
+  private final JoystickButton OperatorYButton = new JoystickButton(m_operatorController,
+      XboxController.Button.kY.value);
+
+  private final POVButton OperatorDPadUp = new POVButton(m_operatorController, 0);
+  private final POVButton OperatorDPadRight = new POVButton(m_operatorController, 90);
+  private final POVButton OperatorDPadDown = new POVButton(m_operatorController, 180);
+  private final POVButton OperatorDPadLeft = new POVButton(m_operatorController, 270);
+
+  private Trigger operatorRightYTrigger = new Trigger(() -> Math.abs(m_operatorController.getRightY()) > 0.10);
+
+  private final Trigger operatorLeftTrigger = new Trigger(() -> m_operatorController.getLeftTriggerAxis() > 0.5);
+  private final Trigger operatorRightTrigger = new Trigger(() -> m_operatorController.getRightTriggerAxis() > 0.5);
+
+  private final JoystickButton OperatorRightBumper = new JoystickButton(m_operatorController,
+      XboxController.Button.kRightBumper.value);
+  private final JoystickButton OperatorLeftBumper = new JoystickButton(m_operatorController,
+      XboxController.Button.kLeftBumper.value);
+
+  private SendableChooser<Command> m_chooser = new SendableChooser<>();
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -44,79 +94,160 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
+    DriverStation.silenceJoystickConnectionWarning(true);
+    
+    // Configure default commands 
+    // m_robotDrive.setDefaultCommand(new driveCommand(m_robotDrive, m_driverController));
+    
+    m_robotDrive.setDefaultCommand(new driveCommand(m_robotDrive, m_driverController));
 
-    // Configure default commands
-    m_robotDrive.setDefaultCommand(
-        // The left stick controls translation of the robot.
-        // Turning is controlled by the X axis of the right stick.
-        new RunCommand(
-            () -> m_robotDrive.drive(
-                -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
-                true, true),
-            m_robotDrive));
+    
+
+    m_chooser.addOption("just shoot", justShootAuto());
+    m_chooser.addOption("shoot pickup from middle shoot", shootPickupShoot());
+    m_chooser.addOption("Three Notes (Preload, Amp & Middle)", centerNoteTopAuto());
+    m_chooser.addOption("Three Notes (Preload, Source & Middle)", centerNoteBottomAuto());
+    m_chooser.addOption("get middle notes out" , messUpNotesAuto());
+    m_chooser.addOption("two note", twoNoteAuto());
+    
+    SmartDashboard.putData(m_chooser);
+
   }
 
-  /**
+  /*
    * Use this method to define your button->command mappings. Buttons can be
-   * created by
+   * created by 
    * instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one of its
    * subclasses ({@link
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then calling
    * passing it to a
    * {@link JoystickButton}.
    */
-  private void configureButtonBindings() {
-    new JoystickButton(m_driverController, Button.kR1.value)
-        .whileTrue(new RunCommand(
-            () -> m_robotDrive.setX(),
-            m_robotDrive));
+  
+
+
+private void configureButtonBindings() {
+    /*
+     * DRIVER BUTTON MAPPINGS
+     */
+
+    DriverGyroButton.whileTrue(new InstantCommand(
+        () -> m_robotDrive.resetGyro(),
+        m_robotDrive));
+
+    /*
+     * OPERATOR BUTTON MAPPING
+     */
   }
+
+//------------------------------------------- autonomous modes -------------------------------------------
+
+    public Command twoNoteAuto(){
+        Command toReturn = new SequentialCommandGroup(
+            new InstantCommand(() -> m_robotDrive.resetPose(new Pose2d(1.35,5.58, new Rotation2d(0)))),
+            new InstantCommand(() -> m_robotDrive.setGyroYawOffset(0)),
+            new PathPlannerAuto("TwoNoteAuton")
+        );
+        toReturn.setName("two note");
+        return toReturn;
+    }
+
+    public Command justShootAuto(){
+       Command toReturn = new PathPlannerAuto("JustShootAuton");
+       toReturn.setName("just shoot");
+       return toReturn;
+    }
+
+    public Command shootPickupShoot(){
+        Command toReturn = new SequentialCommandGroup(
+            new InstantCommand(() -> m_robotDrive.resetPose(new Pose2d(0.68,4.38, new Rotation2d(2*Math.PI/3)))),
+            new InstantCommand(() -> m_robotDrive.setGyroYawOffset(120)),
+            new PathPlannerAuto("ShootPickupShootAuton")
+        );
+        toReturn.setName("shoot pickup from middle shoot");
+        return toReturn;
+    }
+
+    // public Command ampSide(){
+    //     return new SequentialCommandGroup(
+    //         new InstantCommand(() -> m_robotDrive.resetPose(new Pose2d(0.68,4.38, new Rotation2d(-Math.PI/3)))),
+    //         new InstantCommand(() -> m_robotDrive.setGyroYawOffset(60)),
+    //         new PathPlannerAuto("AmpSideAuton")
+    //     );
+    // }
+
+    // public Command testingOtherSideSubwoofer(){
+    //     return new SequentialCommandGroup(
+    //         new InstantCommand(() -> m_robotDrive.resetPose(new Pose2d(0.74,6.68, new Rotation2d(Math.PI/3)))),
+    //         new InstantCommand(() -> m_robotDrive.setGyroYawOffset(60)),
+    //         new PathPlannerAuto("TestingOtherSideSubwooferAuton")
+    //     );
+    // }
+
+	public Command centerNoteTopAuto(){
+        Command toReturn = new SequentialCommandGroup(
+            new InstantCommand(() -> m_robotDrive.resetPose(new Pose2d(1.09,5.56, new Rotation2d(0)))),
+            new InstantCommand(() -> m_robotDrive.setGyroYawOffset(0)),
+            new PathPlannerAuto("CenterTopNotesAuton")
+           );
+        toReturn.setName("Three Notes (Preload, Amp & Middle)");
+        return toReturn;
+    }
+
+    public Command centerNoteBottomAuto(){
+        Command toReturn = new SequentialCommandGroup(
+            new InstantCommand(() -> m_robotDrive.resetPose(new Pose2d(1.09,5.56, new Rotation2d(0)))),
+            new InstantCommand(() -> m_robotDrive.setGyroYawOffset(0)),
+            new PathPlannerAuto("CenterBottomNotesAuton")
+        );
+        toReturn.setName("Three Notes (Preload, Source & Middle)");
+        return toReturn;
+    }
+
+    public Command messUpNotesAuto(){
+        Command toReturn = new SequentialCommandGroup(
+            new InstantCommand(() -> m_robotDrive.resetPose(new Pose2d(0.57,4.56, new Rotation2d(2*Math.PI/3)))),
+            new InstantCommand(() -> m_robotDrive.setGyroYawOffset(120)),
+            new PathPlannerAuto("MoveCenterNotesAwayAuton")
+        );
+        toReturn.setName("get middle notes out");
+        return toReturn;
+    }
+
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
    */
+
   public Command getAutonomousCommand() {
-    // Create config for trajectory
-    TrajectoryConfig config = new TrajectoryConfig(
-        AutoConstants.kMaxSpeedMetersPerSecond,
-        AutoConstants.kMaxAccelerationMetersPerSecondSquared)
-        // Add kinematics to ensure max speed is actually obeyed
-        .setKinematics(DriveConstants.kDriveKinematics);
-
-    // An example trajectory to follow. All units in meters.
-    Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
-        // Start at the origin facing the +X direction
-        new Pose2d(0, 0, new Rotation2d(0)),
-        // Pass through these two interior waypoints, making an 's' curve path
-        List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
-        // End 3 meters straight ahead of where we started, facing forward
-        new Pose2d(3, 0, new Rotation2d(0)),
-        config);
-
-    var thetaController = new ProfiledPIDController(
-        AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
-    thetaController.enableContinuousInput(-Math.PI, Math.PI);
-
-    SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-        exampleTrajectory,
-        m_robotDrive::getPose, // Functional interface to feed supplier
-        DriveConstants.kDriveKinematics,
-
-        // Position controllers
-        new PIDController(AutoConstants.kPXController, 0, 0),
-        new PIDController(AutoConstants.kPYController, 0, 0),
-        thetaController,
-        m_robotDrive::setModuleStates,
-        m_robotDrive);
-
-    // Reset odometry to the starting pose of the trajectory.
-    m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
-
-    // Run path following command, then stop at the end.
-    return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false, false));
+    SmartDashboard.putString("selected auto", m_chooser.getSelected().getName());
+    System.out.println(m_chooser.getSelected().getName());
+    if(m_chooser.getSelected().getName().equals("two note")){
+        System.out.println("^");
+        return twoNoteAuto();
+    }
+    else if(m_chooser.getSelected().getName().equals("get middle notes out")){
+        System.out.println("^^");
+        return messUpNotesAuto();
+    }
+    else if(m_chooser.getSelected().getName().equals("Three Notes (Preload, Amp & Middle)")){
+        System.out.println("^^^");
+        return centerNoteTopAuto();
+    }
+    else if(m_chooser.getSelected().getName().equals("shoot pickup from middle shoot")){
+        System.out.println("^^^^");
+        return shootPickupShoot();
+    }
+    else if((m_chooser.getSelected().getName().equals("Three Notes (Preload, Source & Middle)"))){
+        System.out.println("^^^^^");
+        return centerNoteBottomAuto();
+    }
+    else{
+        System.out.println("^^^^^^^");
+        return justShootAuto();
+    }
+    //return m_chooser.getSelected();
   }
 }
