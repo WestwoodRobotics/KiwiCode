@@ -103,14 +103,14 @@ public class RobotContainer {
 
     
 
-    m_chooser.addOption("just shoot", justShootAuto());
-    m_chooser.addOption("shoot pickup from middle shoot", shootPickupShoot());
-    m_chooser.addOption("Three Notes (Preload, Amp & Middle)", centerNoteTopAuto());
-    m_chooser.addOption("Three Notes (Preload, Source & Middle)", centerNoteBottomAuto());
-    m_chooser.addOption("get middle notes out" , messUpNotesAuto());
-    m_chooser.addOption("two note", twoNoteAuto());
+    // m_chooser.addOption("just shoot", justShootAuto());
+    // m_chooser.addOption("shoot pickup from middle shoot", shootPickupShoot());
+    // m_chooser.addOption("Three Notes (Preload, Amp & Middle)", centerNoteTopAuto());
+    // m_chooser.addOption("Three Notes (Preload, Source & Middle)", centerNoteBottomAuto());
+    // m_chooser.addOption("get middle notes out" , messUpNotesAuto());
+    // m_chooser.addOption("two note", twoNoteAuto());
     
-    SmartDashboard.putData(m_chooser);
+    // SmartDashboard.putData(m_chooser);
 
   }
 
@@ -222,32 +222,33 @@ private void configureButtonBindings() {
    */
 
   public Command getAutonomousCommand() {
-    SmartDashboard.putString("selected auto", m_chooser.getSelected().getName());
-    System.out.println(m_chooser.getSelected().getName());
-    if(m_chooser.getSelected().getName().equals("two note")){
-        System.out.println("^");
-        return twoNoteAuto();
-    }
-    else if(m_chooser.getSelected().getName().equals("get middle notes out")){
-        System.out.println("^^");
-        return messUpNotesAuto();
-    }
-    else if(m_chooser.getSelected().getName().equals("Three Notes (Preload, Amp & Middle)")){
-        System.out.println("^^^");
-        return centerNoteTopAuto();
-    }
-    else if(m_chooser.getSelected().getName().equals("shoot pickup from middle shoot")){
-        System.out.println("^^^^");
-        return shootPickupShoot();
-    }
-    else if((m_chooser.getSelected().getName().equals("Three Notes (Preload, Source & Middle)"))){
-        System.out.println("^^^^^");
-        return centerNoteBottomAuto();
-    }
-    else{
-        System.out.println("^^^^^^^");
-        return justShootAuto();
-    }
+    return (new InstantCommand());
+    // SmartDashboard.putString("selected auto", m_chooser.getSelected().getName());
+    // System.out.println(m_chooser.getSelected().getName());
+    // if(m_chooser.getSelected().getName().equals("two note")){
+    //     System.out.println("^");
+    //     return twoNoteAuto();
+    // }
+    // else if(m_chooser.getSelected().getName().equals("get middle notes out")){
+    //     System.out.println("^^");
+    //     return messUpNotesAuto();
+    // }
+    // else if(m_chooser.getSelected().getName().equals("Three Notes (Preload, Amp & Middle)")){
+    //     System.out.println("^^^");
+    //     return centerNoteTopAuto();
+    // }
+    // else if(m_chooser.getSelected().getName().equals("shoot pickup from middle shoot")){
+    //     System.out.println("^^^^");
+    //     return shootPickupShoot();
+    // }
+    // else if((m_chooser.getSelected().getName().equals("Three Notes (Preload, Source & Middle)"))){
+    //     System.out.println("^^^^^");
+    //     return centerNoteBottomAuto();
+    // }
+    // else{
+    //     System.out.println("^^^^^^^");
+    //     return justShootAuto();
+    // }
     //return m_chooser.getSelected();
   }
 }
