@@ -25,7 +25,7 @@ FROM mcr.microsoft.com/devcontainers/typescript-node:18-bookworm
 
 RUN git config --system codespaces-theme.hide-status 1
 
-RUN wget https://packages.wpilib.workers.dev/installer/v2024.3.1/Linux/WPILib_Linux-2024.3.2tar.gz
+RUN wget https://packages.wpilib.workers.dev/installer/v2024.3.1/Linux/WPILib_Linux-2024.3.2.tar.gz
 RUN tar -xzvf WPILib_Linux-2024.3.2.tar.gz
 RUN cd WPILib_Linux-2024.3.2
 
