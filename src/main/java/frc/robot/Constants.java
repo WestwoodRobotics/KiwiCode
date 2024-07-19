@@ -64,15 +64,15 @@ public final class Constants {
 
   public static final class PortConstants{
     // SPARK MAX CAN IDs
-    public static final int kFrontLeftDrivingCanId = 11;
-    public static final int kRearLeftDrivingCanId = 17;
-    public static final int kFrontRightDrivingCanId = 13;
-    public static final int kRearRightDrivingCanId = 15;
+    public static final int kFrontLeftDrivingCanId = 15;
+    public static final int kRearLeftDrivingCanId = 13;
+    public static final int kFrontRightDrivingCanId = 17;
+    public static final int kRearRightDrivingCanId = 11;
 
-    public static final int kFrontLeftTurningCanId = 10;
-    public static final int kRearLeftTurningCanId = 16;
-    public static final int kFrontRightTurningCanId = 12;
-    public static final int kRearRightTurningCanId = 14;
+    public static final int kFrontLeftTurningCanId = 14;
+    public static final int kRearLeftTurningCanId = 12;
+    public static final int kFrontRightTurningCanId = 16;
+    public static final int kRearRightTurningCanId = 10;
 
 
 
@@ -185,34 +185,34 @@ public final class Constants {
     public static final double kFreeSpeedRpm = 6784;
   }
   public static final class IntakeConstants {
-    public static final int kIntakeMotorPort = 0; //TODO: Change this value
+    public static final int kIntakeMotorPort = 30; //TODO: Change this value
     public static final double kRPMConversionFactor = 1.0;
 
 
-    public static final double kP = 0.0001;
-    public static final double kI = 0.0000001;
-    public static final double kD = 0.0001;
+    public static final double kP = 1;
+    public static final double kI = 0;
+    public static final double kD = 0;
   } 
 
   public static final class ShooterConstants {
-    public static final int kTopRollerPort = 0; //TODO: Change this value
-    public static final int kBottomRollerPort = 0; //TODO: Change this value
-    public static final int kPreRollerPort = 0; //TODO: Change this value
+    public static final int kTopRollerPort = 22 ; //TODO: Change this value
+    public static final int kBottomRollerPort = 23; //TODO: Change this value
+    public static final int kPreRollerPort = 21; //TODO: Change this value
     public static final double kTopRollerRPMConversionFactor = 1.0;
     public static final double kBottomRollerRPMConversionFactor = 1.0;
     public static final double kPreRollerRPMConversionFactor = 1.0;
 
 
-    public static final double kTopRollerP = 0.0001;
-    public static final double kTopRollerI = 0.0000001;
-    public static final double kTopRollerD = 0.0001;
+    public static final double kTopRollerP = 1;
+    public static final double kTopRollerI = 0;
+    public static final double kTopRollerD = 0;
 
-    public static final double kBottomRollerP = 0.0001;
-    public static final double kBottomRollerI = 0.0000001;
-    public static final double kBottomRollerD = 0.0001;
+    public static final double kBottomRollerP = 1;
+    public static final double kBottomRollerI = 0;
+    public static final double kBottomRollerD = 0;
 
-    public static final double kPreRollerP = 0.0001;
-    public static final double kPreRollerI = 0.0000001;
-    public static final double kPreRollerD = 0.0001;
+    public static final double kPreRollerP = 1;
+    public static final double kPreRollerI = 0;
+    public static final double kPreRollerD = 0;
   }
 }

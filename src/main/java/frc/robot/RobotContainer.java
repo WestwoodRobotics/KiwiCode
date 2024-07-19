@@ -4,8 +4,6 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
-import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -15,11 +13,16 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.PortConstants;
+import frc.robot.commands.intake.UTBIntakeCommand;
 import frc.robot.commands.swerve.driveCommand;
+import frc.robot.subsystems.Shooter.TopBottomShooters;
+import frc.robot.subsystems.Shooter.preRoller;
+import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.swerve.SwerveDrive;
 
 
@@ -34,6 +37,9 @@ import frc.robot.subsystems.swerve.SwerveDrive;
 public class RobotContainer {
 
   public final SwerveDrive m_robotDrive = new SwerveDrive();
+  private final Intake m_intake = new Intake();
+  private final preRoller m_preRoller = new preRoller();
+  private final TopBottomShooters m_shooter = new TopBottomShooters(false);
 
   // LED for indicating robot state, not implemented in hardware.
 
@@ -100,6 +106,7 @@ public class RobotContainer {
     // m_robotDrive.setDefaultCommand(new driveCommand(m_robotDrive, m_driverController));
     
     m_robotDrive.setDefaultCommand(new driveCommand(m_robotDrive, m_driverController));
+    
 
     
 
@@ -135,6 +142,12 @@ private void configureButtonBindings() {
         () -> m_robotDrive.resetGyro(),
         m_robotDrive));
 
+    driverRightTrigger.whileTrue(new InstantCommand(() -> m_intake.setIntakePower(1.0)).alongWith(new InstantCommand(() -> m_preRoller.setPreRollerPower(1.0))));
+    driverRightTrigger.onFalse(new InstantCommand(() -> m_intake.setIntakePower(0.0), m_intake).alongWith(new InstantCommand(() -> m_preRoller.setPreRollerPower(0.0), m_preRoller)));
+    driverLeftTrigger.whileTrue(new InstantCommand(() -> m_shooter.setShooterPower(-0.85)).andThen(new WaitCommand(2)).andThen(new InstantCommand(() -> m_preRoller.setPreRollerPower(1))));
+    driverLeftTrigger.whileTrue(new InstantCommand(() -> m_shooter.setShooterPower(0)).alongWith(new InstantCommand(() -> m_preRoller.setPreRollerPower(0))));
+    
+
     /*
      * OPERATOR BUTTON MAPPING
      */
@@ -145,24 +158,24 @@ private void configureButtonBindings() {
     public Command twoNoteAuto(){
         Command toReturn = new SequentialCommandGroup(
             new InstantCommand(() -> m_robotDrive.resetPose(new Pose2d(1.35,5.58, new Rotation2d(0)))),
-            new InstantCommand(() -> m_robotDrive.setGyroYawOffset(0)),
-            new PathPlannerAuto("TwoNoteAuton")
+            new InstantCommand(() -> m_robotDrive.setGyroYawOffset(0))
+            // new PathPlannerAuto("TwoNoteAuton")
         );
         toReturn.setName("two note");
         return toReturn;
     }
 
-    public Command justShootAuto(){
-       Command toReturn = new PathPlannerAuto("JustShootAuton");
-       toReturn.setName("just shoot");
-       return toReturn;
-    }
+    // public Command justShootAuto(){
+    //    Command toReturn = new PathPlannerAuto("JustShootAuton");
+    //    toReturn.setName("just shoot");
+    //    return toReturn;
+    // }
 
     public Command shootPickupShoot(){
         Command toReturn = new SequentialCommandGroup(
             new InstantCommand(() -> m_robotDrive.resetPose(new Pose2d(0.68,4.38, new Rotation2d(2*Math.PI/3)))),
-            new InstantCommand(() -> m_robotDrive.setGyroYawOffset(120)),
-            new PathPlannerAuto("ShootPickupShootAuton")
+            new InstantCommand(() -> m_robotDrive.setGyroYawOffset(120))
+
         );
         toReturn.setName("shoot pickup from middle shoot");
         return toReturn;
@@ -187,8 +200,8 @@ private void configureButtonBindings() {
 	public Command centerNoteTopAuto(){
         Command toReturn = new SequentialCommandGroup(
             new InstantCommand(() -> m_robotDrive.resetPose(new Pose2d(1.09,5.56, new Rotation2d(0)))),
-            new InstantCommand(() -> m_robotDrive.setGyroYawOffset(0)),
-            new PathPlannerAuto("CenterTopNotesAuton")
+            new InstantCommand(() -> m_robotDrive.setGyroYawOffset(0))
+            // new PathPlannerAuto("CenterTopNotesAuton")
            );
         toReturn.setName("Three Notes (Preload, Amp & Middle)");
         return toReturn;
@@ -197,8 +210,8 @@ private void configureButtonBindings() {
     public Command centerNoteBottomAuto(){
         Command toReturn = new SequentialCommandGroup(
             new InstantCommand(() -> m_robotDrive.resetPose(new Pose2d(1.09,5.56, new Rotation2d(0)))),
-            new InstantCommand(() -> m_robotDrive.setGyroYawOffset(0)),
-            new PathPlannerAuto("CenterBottomNotesAuton")
+            new InstantCommand(() -> m_robotDrive.setGyroYawOffset(0))
+            // new PathPlannerAuto("CenterBottomNotesAuton")
         );
         toReturn.setName("Three Notes (Preload, Source & Middle)");
         return toReturn;
@@ -207,8 +220,8 @@ private void configureButtonBindings() {
     public Command messUpNotesAuto(){
         Command toReturn = new SequentialCommandGroup(
             new InstantCommand(() -> m_robotDrive.resetPose(new Pose2d(0.57,4.56, new Rotation2d(2*Math.PI/3)))),
-            new InstantCommand(() -> m_robotDrive.setGyroYawOffset(120)),
-            new PathPlannerAuto("MoveCenterNotesAwayAuton")
+            new InstantCommand(() -> m_robotDrive.setGyroYawOffset(120))
+            // new PathPlannerAuto("MoveCenterNotesAwayAuton")
         );
         toReturn.setName("get middle notes out");
         return toReturn;

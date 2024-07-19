@@ -22,9 +22,9 @@ public class TopBottomShooters extends SubsystemBase {
 
     private double BottomRollerRPMSetpoint;
 
-    public TopBottomShooters(int topRollerId, int bottomRollerId, boolean isPIDControl) {
-        topRoller = new CANSparkFlex(topRollerId, MotorType.kBrushless);
-        bottomRoller = new CANSparkFlex(bottomRollerId, MotorType.kBrushless);
+    public TopBottomShooters(boolean isPIDControl) {
+        topRoller = new CANSparkFlex(ShooterConstants.kTopRollerPort, MotorType.kBrushless);
+        bottomRoller = new CANSparkFlex(ShooterConstants.kBottomRollerPort, MotorType.kBrushless);
         this.isPIDCOntrol = isPIDControl;
 
         this.TopRollerPIDController = new PIDController(ShooterConstants.kTopRollerP, 

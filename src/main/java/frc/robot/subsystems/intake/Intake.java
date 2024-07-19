@@ -11,8 +11,8 @@ public class Intake extends SubsystemBase {
     private CANSparkBase intakeMotor;
     private PIDController PIDController;
 
-    public Intake(int intakeMotorId) {
-        intakeMotor = new CANSparkMax(intakeMotorId, MotorType.kBrushless); 
+    public Intake() {
+        intakeMotor = new CANSparkMax(IntakeConstants.kIntakeMotorPort, MotorType.kBrushless); 
         this.PIDController = new PIDController(IntakeConstants.kP, 
                                                IntakeConstants.kI, 
                                                IntakeConstants.kD);
