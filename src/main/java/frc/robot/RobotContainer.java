@@ -142,11 +142,21 @@ private void configureButtonBindings() {
         () -> m_robotDrive.resetGyro(),
         m_robotDrive));
 
-    driverRightTrigger.whileTrue(new InstantCommand(() -> m_intake.setIntakePower(1.0)).alongWith(new InstantCommand(() -> m_preRoller.setPreRollerPower(1.0))));
-    driverRightTrigger.onFalse(new InstantCommand(() -> m_intake.setIntakePower(0.0), m_intake).alongWith(new InstantCommand(() -> m_preRoller.setPreRollerPower(0.0), m_preRoller)));
-    driverLeftTrigger.whileTrue(new InstantCommand(() -> m_shooter.setShooterPower(-0.85)).andThen(new WaitCommand(2)).andThen(new InstantCommand(() -> m_preRoller.setPreRollerPower(1))));
-    driverLeftTrigger.whileTrue(new InstantCommand(() -> m_shooter.setShooterPower(0)).alongWith(new InstantCommand(() -> m_preRoller.setPreRollerPower(0))));
-    
+    driverLeftTrigger.onTrue(new InstantCommand(() -> m_intake.setIntakePower(1.0), m_intake).alongWith(new InstantCommand(() -> m_preRoller.setPreRollerPower(1.0), m_preRoller)).alongWith(new InstantCommand(() -> m_shooter.setShooterPower(-0.25), m_shooter)));
+    driverLeftTrigger.onFalse(new InstantCommand(() -> m_intake.setIntakePower(0.0), m_intake).alongWith(new InstantCommand(() -> m_preRoller.setPreRollerPower(0.0), m_preRoller)));
+    driverRightTrigger.onTrue(new InstantCommand(() -> m_shooter.setShooterPower(0.85), m_shooter));
+    driverRightTrigger.onFalse(new InstantCommand(() -> m_shooter.setShooterPower(0), m_shooter));
+
+    DriverDPadDown.onTrue(new InstantCommand(() -> m_shooter.setShooterPower(-0.85), m_shooter));
+    DriverBButton.onTrue(new InstantCommand(() -> m_preRoller.setPreRollerPower(1), m_preRoller));
+    DriverBButton.onFalse(new InstantCommand(() -> m_preRoller.setPreRollerPower(0), m_preRoller));
+    DriverXButton.onTrue(new InstantCommand(() -> m_preRoller.setPreRollerPower(-1), m_preRoller));
+    DriverXButton.onFalse(new InstantCommand(() -> m_preRoller.setPreRollerPower(0), m_preRoller));
+
+    DriverAButton.onTrue(new InstantCommand(() -> m_intake.setIntakePower(1), m_intake));
+    DriverAButton.onFalse(new InstantCommand(() -> m_intake.setIntakePower(0), m_intake));
+    DriverYButton.onTrue(new InstantCommand(() -> m_intake.setIntakePower(-1), m_intake));
+    DriverYButton.onFalse(new InstantCommand(() -> m_intake.setIntakePower(0), m_intake));
 
     /*
      * OPERATOR BUTTON MAPPING

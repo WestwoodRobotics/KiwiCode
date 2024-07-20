@@ -46,6 +46,7 @@ public class driveCommand extends Command {
     leftX = -MathUtil.applyDeadband(controller.getLeftX(), ControllerConstants.kDriveDeadband);
     leftY = -MathUtil.applyDeadband(controller.getLeftY(), ControllerConstants.kDriveDeadband);
     rightX = -MathUtil.applyDeadband(controller.getRightX(), ControllerConstants.kDriveDeadband);
+    System.out.println(controller.getRightX());
 
 
     // Apply non-linear input (squaring the input)

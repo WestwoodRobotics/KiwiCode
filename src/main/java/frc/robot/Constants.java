@@ -145,7 +145,7 @@ public final class Constants {
   }
 
   public static final class ControllerConstants {
-    public static final double kDriveDeadband = 0.02;
+    public static final double kDriveDeadband = 0.2;
   }
 
   public static final class AutoConstants {
@@ -195,9 +195,9 @@ public final class Constants {
   } 
 
   public static final class ShooterConstants {
-    public static final int kTopRollerPort = 22 ; //TODO: Change this value
-    public static final int kBottomRollerPort = 23; //TODO: Change this value
-    public static final int kPreRollerPort = 21; //TODO: Change this value
+    public static final int kTopRollerPort = 21 ; //TODO: Change this value
+    public static final int kBottomRollerPort = 20; //TODO: Change this value
+    public static final int kPreRollerPort = 22; //TODO: Change this value
     public static final double kTopRollerRPMConversionFactor = 1.0;
     public static final double kBottomRollerRPMConversionFactor = 1.0;
     public static final double kPreRollerRPMConversionFactor = 1.0;

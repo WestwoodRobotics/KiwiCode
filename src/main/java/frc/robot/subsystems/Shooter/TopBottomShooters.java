@@ -37,16 +37,16 @@ public class TopBottomShooters extends SubsystemBase {
     }
 
     public void setTopRollerPower(double power) {
-        topRoller.set(power);
+        topRoller.set(-power);
     }
 
     public void setBottomRollerPower(double power) {
-        bottomRoller.set(power);
+        bottomRoller.set(-power);
     }
 
     public void setShooterPower(double power) {
-        setTopRollerPower(power);
-        setBottomRollerPower(power);
+        setTopRollerPower(-power);
+        setBottomRollerPower(-power);
     }
 
     public double getTopRollerMotorRawRPM() {
