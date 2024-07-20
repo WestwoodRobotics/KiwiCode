@@ -4,10 +4,10 @@
 
 package frc.robot.subsystems.swerve;
 
-// import com.pathplanner.lib.auto.AutoBuilder;
-// import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-// import com.pathplanner.lib.util.PIDConstants;
-// import com.pathplanner.lib.util.ReplanningConfig;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
@@ -95,27 +95,27 @@ public class SwerveDrive extends SubsystemBase {
     fieldVisualization = new Field2d();
     SmartDashboard.putData("Field", fieldVisualization);
 
-    // AutoBuilder.configureHolonomic(
-    //   this::getPose,
-    //   this::resetPose,
-    //   this::getRobotRelativeSpeeds,
-    //   this::driveChassisSpeeds,
-    //   new HolonomicPathFollowerConfig(
-    //           new PIDConstants(ModuleConstants.kDrivingP+6, ModuleConstants.kDrivingI+1, ModuleConstants.kDrivingD),
-    //           new PIDConstants(ModuleConstants.kTurningP+20, ModuleConstants.kTurningI+0.003, ModuleConstants.kTurningD),
-    //           AutoConstants.kMaxModuleSpeedMetersPerSecond,
-    //           AutoConstants.kDriveBaseRadius,
-    //           new ReplanningConfig()
-    //   ),
-    //   () -> {
-    //     var alliance = DriverStation.getAlliance();
-    //     if (alliance.isPresent()) {
-    //       return (alliance.get() == DriverStation.Alliance.Red);
-    //     }
-    //     return false;
-    //   },
-    //   this
-    // );
+    AutoBuilder.configureHolonomic(
+      this::getPose,
+      this::resetPose,
+      this::getRobotRelativeSpeeds,
+      this::driveChassisSpeeds,
+      new HolonomicPathFollowerConfig(
+              new PIDConstants(ModuleConstants.kDrivingP+6, ModuleConstants.kDrivingI+1, ModuleConstants.kDrivingD),
+              new PIDConstants(ModuleConstants.kTurningP+20, ModuleConstants.kTurningI+0.003, ModuleConstants.kTurningD),
+              AutoConstants.kMaxModuleSpeedMetersPerSecond,
+              AutoConstants.kDriveBaseRadius,
+              new ReplanningConfig()
+      ),
+      () -> {
+        var alliance = DriverStation.getAlliance();
+        if (alliance.isPresent()) {
+          return (alliance.get() == DriverStation.Alliance.Red);
+        }
+        return false;
+      },
+      this
+    );
   }
 
   /**

@@ -4,6 +4,8 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -100,6 +102,7 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
+    NamedCommands.registerCommand("Shoot", new InstantCommand(() -> m_shooter.setShooterPower(0.85), m_shooter).andThen(new WaitCommand(2)).andThen(new InstantCommand(() -> m_preRoller.setPreRollerPower(1), m_shooter)).andThen(new WaitCommand(1)).andThen(new InstantCommand(() -> m_preRoller.setPreRollerPower(0), m_shooter).alongWith(new InstantCommand(() -> m_shooter.setShooterPower(0), m_shooter))));
     DriverStation.silenceJoystickConnectionWarning(true);
     
     // Configure default commands 
@@ -229,11 +232,21 @@ private void configureButtonBindings() {
 
     public Command messUpNotesAuto(){
         Command toReturn = new SequentialCommandGroup(
-            new InstantCommand(() -> m_robotDrive.resetPose(new Pose2d(0.57,4.56, new Rotation2d(2*Math.PI/3)))),
-            new InstantCommand(() -> m_robotDrive.setGyroYawOffset(120))
-            // new PathPlannerAuto("MoveCenterNotesAwayAuton")
+            new InstantCommand(() -> m_robotDrive.resetPose(new Pose2d(1.34,5.58, new Rotation2d(0)))),
+            new InstantCommand(() -> m_robotDrive.setGyroYawOffset(0))
+            //new PathPlannerAuto("MoveCenterNotesAwayAuton")
         );
         toReturn.setName("get middle notes out");
+        return toReturn;
+    }
+
+    public Command ExampleAutoInOut(){
+        Command toReturn = new SequentialCommandGroup(
+            new InstantCommand(() -> m_robotDrive.resetPose(new Pose2d(1.34,4.56, new Rotation2d()))),
+            new InstantCommand(() -> m_robotDrive.setGyroYawOffset(0.0)),
+            new PathPlannerAuto("ShootAndOut")
+        );
+        toReturn.setName("ExampleAutoInOut");
         return toReturn;
     }
 
@@ -245,7 +258,7 @@ private void configureButtonBindings() {
    */
 
   public Command getAutonomousCommand() {
-    return (new InstantCommand());
+    return (this.ExampleAutoInOut());
     // SmartDashboard.putString("selected auto", m_chooser.getSelected().getName());
     // System.out.println(m_chooser.getSelected().getName());
     // if(m_chooser.getSelected().getName().equals("two note")){
