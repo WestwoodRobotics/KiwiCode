@@ -76,6 +76,7 @@ public class SwerveDrive extends SubsystemBase {
       });
 
   Field2d fieldVisualization;
+  private boolean isYuMode;
 
   /**
    * Initializes a new instance of the SwerveDrive class.
@@ -87,10 +88,6 @@ public class SwerveDrive extends SubsystemBase {
       System.out.println("Warning: Gyro not responding. Skipping gyro initialization.");
       gyroSubsystem = null;
     }      
-
-    if (gyroSubsystem != null) {
-      gyroSubsystem.reset();
-    }
 
     fieldVisualization = new Field2d();
     SmartDashboard.putData("Field", fieldVisualization);
@@ -190,7 +187,6 @@ public class SwerveDrive extends SubsystemBase {
     double xSpeedCommanded = xSpeed * DriveConstants.kMaxSpeedMetersPerSecond;
     double ySpeedCommanded = ySpeed * DriveConstants.kMaxSpeedMetersPerSecond;
     double rotCommanded = rot * DriveConstants.kMaxAngularSpeed;
-
     SwerveModuleState[] swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
         fieldRelative
             ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedCommanded, ySpeedCommanded, rotCommanded, Rotation2d.fromDegrees(gyroSubsystem.getRawGyroObject().getZAngle()))
@@ -332,5 +328,13 @@ public class SwerveDrive extends SubsystemBase {
           rearRightSwerveModule.getPosition()
       },
       Pose);
+  }
+
+  public void toggleYuMode(){
+    isYuMode = !isYuMode;
+  }
+
+  public boolean isYuMode(){
+    return isYuMode;
   }
 }

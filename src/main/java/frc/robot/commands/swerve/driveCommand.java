@@ -17,6 +17,7 @@ public class driveCommand extends Command {
 
   private XboxController controller;
   private boolean slowMode;
+  private boolean isYuMode;
 
 
 
@@ -25,6 +26,7 @@ public class driveCommand extends Command {
     m_swerveDrive = swerveDrive;
     this.controller = controller;
     addRequirements(swerveDrive);
+
   }
 
 
@@ -38,16 +40,22 @@ public class driveCommand extends Command {
   @Override
   public void execute() {
     double leftX, leftY, rightX;
+    isYuMode = m_swerveDrive.isYuMode();
     if (controller.getBackButtonPressed())
     {
       slowMode = !slowMode;
     }
-
-    leftX = -MathUtil.applyDeadband(controller.getLeftX(), ControllerConstants.kDriveDeadband);
-    leftY = -MathUtil.applyDeadband(controller.getLeftY(), ControllerConstants.kDriveDeadband);
-    rightX = -MathUtil.applyDeadband(controller.getRightX(), ControllerConstants.kDriveDeadband);
-    System.out.println(controller.getRightX());
-
+    if (isYuMode == false){
+      leftX = -MathUtil.applyDeadband(controller.getLeftX(), ControllerConstants.kDriveDeadband);
+      leftY = -MathUtil.applyDeadband(controller.getLeftY(), ControllerConstants.kDriveDeadband);
+      rightX = -MathUtil.applyDeadband(controller.getRightX(), ControllerConstants.kDriveDeadband);
+    }
+    else{
+      leftX = -MathUtil.applyDeadband(controller.getRightX(), ControllerConstants.kDriveDeadband);
+      leftY = -MathUtil.applyDeadband(controller.getRightY(), ControllerConstants.kDriveDeadband);
+      rightX = -MathUtil.applyDeadband(controller.getLeftX(), ControllerConstants.kDriveDeadband);
+    }
+    
 
     // Apply non-linear input (squaring the input)
     // leftX = Math.copySign(Math.pow(leftX, 2), leftX);
@@ -70,6 +78,10 @@ public class driveCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {}
+
+  public void toggleYuMode(){
+    isYuMode = !isYuMode;
+  }
 
   // Returns true when the command should end.
   @Override

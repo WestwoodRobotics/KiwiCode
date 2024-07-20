@@ -103,6 +103,7 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
     NamedCommands.registerCommand("Shoot", new InstantCommand(() -> m_shooter.setShooterPower(0.85), m_shooter).andThen(new WaitCommand(2)).andThen(new InstantCommand(() -> m_preRoller.setPreRollerPower(1), m_preRoller)).andThen(new WaitCommand(1)).andThen(new InstantCommand(() -> m_preRoller.setPreRollerPower(0), m_preRoller).alongWith(new InstantCommand(() -> m_shooter.setShooterPower(0), m_shooter))));
+    NamedCommands.registerCommand("Intake", new InstantCommand(() -> m_intake.setIntakePower(1), m_intake));
     DriverStation.silenceJoystickConnectionWarning(true);
     
     // Configure default commands 
@@ -160,6 +161,10 @@ private void configureButtonBindings() {
     DriverAButton.onFalse(new InstantCommand(() -> m_intake.setIntakePower(0), m_intake));
     DriverYButton.onTrue(new InstantCommand(() -> m_intake.setIntakePower(-1), m_intake));
     DriverYButton.onFalse(new InstantCommand(() -> m_intake.setIntakePower(0), m_intake));
+
+    DriverLeftBumper.onTrue(new InstantCommand(() -> m_shooter.setShooterPower(-0.25), m_shooter));
+    DriverLeftBumper.onFalse(new InstantCommand(() -> m_shooter.setShooterPower(0), m_shooter));
+    DriverDPadLeft.onTrue(new InstantCommand(()-> m_robotDrive.toggleYuMode()));
 
     /*
      * OPERATOR BUTTON MAPPING
@@ -242,14 +247,26 @@ private void configureButtonBindings() {
 
     public Command ExampleAutoInOut(){
         Command toReturn = new SequentialCommandGroup(
-            new InstantCommand(() -> m_robotDrive.resetPose(new Pose2d(1.34,4.56, new Rotation2d()))),
-            new InstantCommand(() -> m_robotDrive.setGyroYawOffset(0.0)),
-            new PathPlannerAuto("ShootAndOut")
+            new InstantCommand(() -> m_robotDrive.resetPose(new Pose2d(1.34,4.56, new Rotation2d(90.0)))),
+            new InstantCommand(() -> m_robotDrive.setGyroYawOffset(90.0)),
+            new PathPlannerAuto("ShootAndOut"),
+            new InstantCommand(() -> m_robotDrive.setGyroYawOffset(0.0))
+
         );
-        toReturn.setName("ExampleAutoInOut");
+        toReturn.setName("ShootAndOut");
         return toReturn;
     }
 
+    public Command InfinityAuto(){
+        Command toReturn = new SequentialCommandGroup(
+            new InstantCommand(() -> m_robotDrive.resetPose(new Pose2d(2.1,4.51, new Rotation2d(0.0)))),
+            new InstantCommand(() -> m_robotDrive.setGyroYawOffset(180.0)),
+            new PathPlannerAuto("InfinityAuto"),
+            new InstantCommand(() -> m_robotDrive.setGyroYawOffset(90.0))
+        );
+        toReturn.setName("InfinityAuto");
+        return toReturn;
+    }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
