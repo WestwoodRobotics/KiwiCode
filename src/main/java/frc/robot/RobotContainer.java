@@ -108,7 +108,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Shoot", new InstantCommand(() -> m_shooter.setShooterPower(0.85), m_shooter).andThen(new WaitCommand(2)).andThen(new InstantCommand(() -> m_preRoller.setPreRollerPower(1), m_preRoller)).andThen(new WaitCommand(1)).andThen(new InstantCommand(() -> m_preRoller.setPreRollerPower(0), m_preRoller).alongWith(new InstantCommand(() -> m_shooter.setShooterPower(0), m_shooter))));
     NamedCommands.registerCommand("Intake", new InstantCommand(() -> m_intake.setIntakePower(1), m_intake));
 
-    NamedCommands.registerCommand("SpinSensePreRoller", new preRollerSenseCommand(m_preRoller, 1, 0.5, 5, 30));
+    NamedCommands.registerCommand("SpinSensePreRoller", new preRollerSenseCommand(m_preRoller, 0.8, 0.4, 30, 30));
     NamedCommands.registerCommand("pls", new WaitCommand(5));
     DriverStation.silenceJoystickConnectionWarning(true);
     
@@ -152,8 +152,9 @@ private void configureButtonBindings() {
         () -> m_robotDrive.resetGyro(),
         m_robotDrive));
 
-    driverLeftTrigger.onTrue(new InstantCommand(() -> m_intake.setIntakePower(1.0), m_intake).alongWith(new InstantCommand(() -> m_preRoller.setPreRollerPower(1.0), m_preRoller)).alongWith(new InstantCommand(() -> m_shooter.setShooterPower(-0.25), m_shooter)));
+    driverLeftTrigger.onTrue(new InstantCommand(() -> m_intake.setIntakePower(1.0), m_intake).alongWith(new preRollerSenseCommand(m_preRoller, 0.8, 0.4, 30, 30)));
     driverLeftTrigger.onFalse(new InstantCommand(() -> m_intake.setIntakePower(0.0), m_intake).alongWith(new InstantCommand(() -> m_preRoller.setPreRollerPower(0.0), m_preRoller)));
+
     driverRightTrigger.onTrue(new InstantCommand(() -> m_shooter.setShooterPower(0.85), m_shooter));
     driverRightTrigger.onFalse(new InstantCommand(() -> m_shooter.setShooterPower(0), m_shooter));
 
