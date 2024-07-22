@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
@@ -21,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.PortConstants;
+import frc.robot.commands.ODCommandFactory;
 import frc.robot.commands.intake.UTBIntakeCommand;
 import frc.robot.commands.preRoller.preRollerIntakeCommand;
 import frc.robot.commands.preRoller.preRollerSenseCommand;
@@ -98,6 +100,8 @@ public class RobotContainer {
       XboxController.Button.kLeftBumper.value);
 
   private SendableChooser<Command> m_chooser = new SendableChooser<>();
+  private ODCommandFactory ODCommandFactory = new ODCommandFactory(m_intake, m_preRoller, m_shooter);
+
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -106,9 +110,9 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
     NamedCommands.registerCommand("Shoot", new InstantCommand(() -> m_shooter.setShooterPower(0.85), m_shooter).andThen(new WaitCommand(2)).andThen(new InstantCommand(() -> m_preRoller.setPreRollerPower(1), m_preRoller)).andThen(new WaitCommand(1)).andThen(new InstantCommand(() -> m_preRoller.setPreRollerPower(0), m_preRoller).alongWith(new InstantCommand(() -> m_shooter.setShooterPower(0), m_shooter))));
-    NamedCommands.registerCommand("Intake", new InstantCommand(() -> m_intake.setIntakePower(1), m_intake));
+    NamedCommands.registerCommand("Intake", new InstantCommand(() -> m_intake.setIntakePower(0.5), m_intake));
 
-    NamedCommands.registerCommand("SpinSensePreRoller", new preRollerSenseCommand(m_preRoller, 0.8, 0.4, 30, 30));
+    NamedCommands.registerCommand("SpinSensePreRoller", ODCommandFactory.intakeSenseCommand());
     NamedCommands.registerCommand("pls", new WaitCommand(5));
     DriverStation.silenceJoystickConnectionWarning(true);
     
@@ -116,6 +120,7 @@ public class RobotContainer {
     // m_robotDrive.setDefaultCommand(new driveCommand(m_robotDrive, m_driverController));
     
     m_robotDrive.setDefaultCommand(new driveCommand(m_robotDrive, m_driverController));
+    
     
 
     
@@ -152,13 +157,14 @@ private void configureButtonBindings() {
         () -> m_robotDrive.resetGyro(),
         m_robotDrive));
 
-    driverLeftTrigger.onTrue(new InstantCommand(() -> m_intake.setIntakePower(1.0), m_intake).alongWith(new preRollerSenseCommand(m_preRoller, 0.8, 0.4, 30, 30)));
-    driverLeftTrigger.onFalse(new InstantCommand(() -> m_intake.setIntakePower(0.0), m_intake).alongWith(new InstantCommand(() -> m_preRoller.setPreRollerPower(0.0), m_preRoller)));
+    driverLeftTrigger.onTrue(ODCommandFactory.intakeSenseCommand());
+    driverLeftTrigger.onFalse(ODCommandFactory.stopIntakeSenseCommand());
 
-    driverRightTrigger.onTrue(new InstantCommand(() -> m_shooter.setShooterPower(0.85), m_shooter));
-    driverRightTrigger.onFalse(new InstantCommand(() -> m_shooter.setShooterPower(0), m_shooter));
+    driverRightTrigger.onTrue(ODCommandFactory.revUpAndShootCommand(2));
+    driverRightTrigger.onFalse(ODCommandFactory.stopShooterCommand());
 
     DriverDPadDown.onTrue(new InstantCommand(() -> m_shooter.setShooterPower(-0.85), m_shooter));
+
     DriverBButton.onTrue(new InstantCommand(() -> m_preRoller.setPreRollerPower(1), m_preRoller));
     DriverBButton.onFalse(new InstantCommand(() -> m_preRoller.setPreRollerPower(0), m_preRoller));
     DriverXButton.onTrue(new InstantCommand(() -> m_preRoller.setPreRollerPower(-1), m_preRoller));
