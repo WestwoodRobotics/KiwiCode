@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -107,8 +108,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("Shoot", new InstantCommand(() -> m_shooter.setShooterPower(0.85), m_shooter).andThen(new WaitCommand(2)).andThen(new InstantCommand(() -> m_preRoller.setPreRollerPower(1), m_preRoller)).andThen(new WaitCommand(1)).andThen(new InstantCommand(() -> m_preRoller.setPreRollerPower(0), m_preRoller).alongWith(new InstantCommand(() -> m_shooter.setShooterPower(0), m_shooter))));
     NamedCommands.registerCommand("Intake", new InstantCommand(() -> m_intake.setIntakePower(1), m_intake));
 
-    NamedCommands.registerCommand("SpinSensePreRoller", new preRollerSenseCommand(m_preRoller, 1, 0.5, 0.5, 10));
-    
+    NamedCommands.registerCommand("SpinSensePreRoller", new preRollerSenseCommand(m_preRoller, 1, 0.5, 5, 30));
+    NamedCommands.registerCommand("pls", new WaitCommand(5));
     DriverStation.silenceJoystickConnectionWarning(true);
     
     // Configure default commands 
@@ -198,7 +199,6 @@ private void configureButtonBindings() {
         Command toReturn = new SequentialCommandGroup(
             new InstantCommand(() -> m_robotDrive.resetPose(new Pose2d(0.68,4.38, new Rotation2d(2*Math.PI/3)))),
             new InstantCommand(() -> m_robotDrive.setGyroYawOffset(120))
-
         );
         toReturn.setName("shoot pickup from middle shoot");
         return toReturn;
@@ -254,11 +254,11 @@ private void configureButtonBindings() {
         Command toReturn = new SequentialCommandGroup(
             new InstantCommand(() -> m_robotDrive.resetPose(new Pose2d(1.34,4.56, new Rotation2d(90.0)))),
             new InstantCommand(() -> m_robotDrive.setGyroYawOffset(90.0)),
-            new PathPlannerAuto("ShootAndOut"),
+            new PathPlannerAuto("Spinny"),
             new InstantCommand(() -> m_robotDrive.setGyroYawOffset(0.0))
 
         );
-        toReturn.setName("ShootAndOut");
+        toReturn.setName("Spinny");
         return toReturn;
     }
 
@@ -280,7 +280,8 @@ private void configureButtonBindings() {
    */
 
   public Command getAutonomousCommand() {
-    return (this.ExampleAutoInOut());
+    //return (new SequentialCommandGroup(new preRollerSenseCommand(m_preRoller, 1, 0.2, 40, 30).andThen(new WaitCommand(5).andThen(new preRollerSenseCommand(m_preRoller, 1, 0.2, 40, 30)))));
+    return ExampleAutoInOut();
     // SmartDashboard.putString("selected auto", m_chooser.getSelected().getName());
     // System.out.println(m_chooser.getSelected().getName());
     // if(m_chooser.getSelected().getName().equals("two note")){

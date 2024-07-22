@@ -13,6 +13,7 @@ public class preRoller extends SubsystemBase {
     private CANSparkMax preRollerMotor;
 
     private PIDController PIDController;
+    private double currentCurrentOffset = 0;
 
     private boolean printed = false;
     private double lastCurrent;
@@ -49,7 +50,7 @@ public class preRoller extends SubsystemBase {
 
     //A method that will return the current output current of the motor
     public double getOutputCurrent(){
-        return preRollerMotor.getOutputCurrent();
+        return preRollerMotor.getOutputCurrent() - ;
     }
     
 
@@ -61,11 +62,19 @@ public class preRoller extends SubsystemBase {
                 lastCurrent = this.getOutputCurrent();
                 printed = true;
             }
-            else if(Math.abs(lastCurrent - preRollerMotor.getOutputCurrent()) > 0.5){
+            else if(Math.abs(lastCurrent - preRollerMotor.getOutputCurrent()) > 10){
                 System.out.println("PreRoller Current: " + getOutputCurrent());
                 lastCurrent = this.getOutputCurrent();
             }
         }
     }
+
+    public void resetOutputCurrent(){
+        currentCurrentOffset = getOutputCurrent();
+    }
+
+    
+
+    
 
 }
