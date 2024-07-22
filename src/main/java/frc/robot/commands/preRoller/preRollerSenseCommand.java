@@ -57,12 +57,8 @@ public class preRollerSenseCommand extends Command {
                     timer.reset();
                     timer.start();
                 }
-            } else {
-                // If the current delta is within the threshold, reset the timer state.
-                timerStarted = false;
-                timer.stop();
-                timer.reset();
             }
+            // Removed the else block that resets the timer if the current is within the threshold
             return timer.hasElapsed(timerDelayMS / 1000.0);
         }
         return false;

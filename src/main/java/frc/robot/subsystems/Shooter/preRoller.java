@@ -50,7 +50,7 @@ public class preRoller extends SubsystemBase {
 
     //A method that will return the current output current of the motor
     public double getOutputCurrent(){
-        return preRollerMotor.getOutputCurrent() - ;
+        return preRollerMotor.getOutputCurrent() - currentCurrentOffset;
     }
     
 
