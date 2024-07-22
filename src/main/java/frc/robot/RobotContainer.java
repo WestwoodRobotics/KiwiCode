@@ -21,6 +21,8 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.PortConstants;
 import frc.robot.commands.intake.UTBIntakeCommand;
+import frc.robot.commands.preRoller.preRollerIntakeCommand;
+import frc.robot.commands.preRoller.preRollerSenseCommand;
 import frc.robot.commands.swerve.driveCommand;
 import frc.robot.subsystems.Shooter.TopBottomShooters;
 import frc.robot.subsystems.Shooter.preRoller;
@@ -104,6 +106,9 @@ public class RobotContainer {
     configureButtonBindings();
     NamedCommands.registerCommand("Shoot", new InstantCommand(() -> m_shooter.setShooterPower(0.85), m_shooter).andThen(new WaitCommand(2)).andThen(new InstantCommand(() -> m_preRoller.setPreRollerPower(1), m_preRoller)).andThen(new WaitCommand(1)).andThen(new InstantCommand(() -> m_preRoller.setPreRollerPower(0), m_preRoller).alongWith(new InstantCommand(() -> m_shooter.setShooterPower(0), m_shooter))));
     NamedCommands.registerCommand("Intake", new InstantCommand(() -> m_intake.setIntakePower(1), m_intake));
+
+    NamedCommands.registerCommand("SpinSensePreRoller", new preRollerSenseCommand(m_preRoller, 1, 0.5, 0.5, 10));
+    
     DriverStation.silenceJoystickConnectionWarning(true);
     
     // Configure default commands 

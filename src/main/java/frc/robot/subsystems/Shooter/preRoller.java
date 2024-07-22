@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.Constants.UtilityConstants;
 import edu.wpi.first.math.controller.PIDController;
 
 
@@ -12,6 +13,9 @@ public class preRoller extends SubsystemBase {
     private CANSparkMax preRollerMotor;
 
     private PIDController PIDController;
+
+    private boolean printed = false;
+    private double lastCurrent;
 
     // Constructor
     public preRoller() {
@@ -43,9 +47,25 @@ public class preRoller extends SubsystemBase {
         return PIDController;
     }
 
+    //A method that will return the current output current of the motor
+    public double getOutputCurrent(){
+        return preRollerMotor.getOutputCurrent();
+    }
+    
+
     @Override
     public void periodic() {
-    
+        if (UtilityConstants.debugMode){
+            if(!printed){
+                System.out.println("PreRoller Current: " + getOutputCurrent());
+                lastCurrent = this.getOutputCurrent();
+                printed = true;
+            }
+            else if(Math.abs(lastCurrent - preRollerMotor.getOutputCurrent()) > 0.5){
+                System.out.println("PreRoller Current: " + getOutputCurrent());
+                lastCurrent = this.getOutputCurrent();
+            }
+        }
     }
 
 }

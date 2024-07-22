@@ -215,4 +215,8 @@ public final class Constants {
     public static final double kPreRollerI = 0;
     public static final double kPreRollerD = 0;
   }
+
+  public static final class UtilityConstants {
+    public static final boolean debugMode = true;
+  }
 }
