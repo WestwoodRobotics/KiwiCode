@@ -18,6 +18,8 @@ public class preRoller extends SubsystemBase {
     private boolean printed = false;
     private double lastCurrent;
 
+    private boolean isHoldingNote;
+
     // Constructor
     public preRoller() {
         preRollerMotor = new CANSparkMax(ShooterConstants.kPreRollerPort, MotorType.kBrushless);
@@ -73,8 +75,25 @@ public class preRoller extends SubsystemBase {
         currentCurrentOffset = getOutputCurrent();
     }
 
-    
+    public void setHoldingNote(boolean isHoldingNote, Class<?> caller){
+        if ((caller.getClass().getName().equals("frc.robot.commands.preRoller.preRollerSenseCommand"))){
+            this.isHoldingNote = isHoldingNote;
+        } else {
+            throw new IllegalArgumentException("The caller must be either preRollerSenseCommand or shooterSenseCommand or intakeSenseCommand");
+        }
+    }
+
+    public boolean getHoldingNote(Class<?> caller){
+        if ((caller.getClass().getName().equals("frc.robot.commands.preRoller.preRollerSenseCommand")) 
+            || (caller.getClass().getName().equals("frc.robot.commands.shooter.shooterSenseCommand"))
+            || (caller.getClass().getName().equals("frc.robot.commands.intake.intakeSenseCommand"))){
+            return isHoldingNote;
+        } else {
+            throw new IllegalArgumentException("The caller must be either preRollerSenseCommand or shooterSenseCommand or intakeSenseCommand");
+    }
 
     
 
+    
+    }
 }

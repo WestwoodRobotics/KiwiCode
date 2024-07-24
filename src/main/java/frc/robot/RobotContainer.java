@@ -109,11 +109,12 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
-    NamedCommands.registerCommand("Shoot", new InstantCommand(() -> m_shooter.setShooterPower(0.85), m_shooter).andThen(new WaitCommand(2)).andThen(new InstantCommand(() -> m_preRoller.setPreRollerPower(1), m_preRoller)).andThen(new WaitCommand(1)).andThen(new InstantCommand(() -> m_preRoller.setPreRollerPower(0), m_preRoller).alongWith(new InstantCommand(() -> m_shooter.setShooterPower(0), m_shooter))));
-    NamedCommands.registerCommand("Intake", new InstantCommand(() -> m_intake.setIntakePower(0.5), m_intake));
-
     NamedCommands.registerCommand("SpinSensePreRoller", ODCommandFactory.intakeSenseCommand());
-    NamedCommands.registerCommand("pls", new WaitCommand(5));
+    NamedCommands.registerCommand("Intake", ODCommandFactory.intakeSenseCommand());
+    NamedCommands.registerCommand("StopIntake", ODCommandFactory.stopIntakeSenseCommand());
+    NamedCommands.registerCommand("RevUpAndShoot", ODCommandFactory.revUpAndShootCommand(2));
+    NamedCommands.registerCommand("StopShooter", ODCommandFactory.stopShooterCommand());
+
     DriverStation.silenceJoystickConnectionWarning(true);
     
     // Configure default commands 

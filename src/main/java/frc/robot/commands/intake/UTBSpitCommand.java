@@ -35,7 +35,6 @@ public class UTBSpitCommand extends Command{
 
     @Override
     public void end(boolean interrupted) {
-        // TODO Auto-generated method stub
         intake.stopIntake();
     }
     
