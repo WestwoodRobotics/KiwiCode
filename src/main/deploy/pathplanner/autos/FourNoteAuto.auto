@@ -35,12 +35,6 @@
           "data": {
             "commands": [
               {
-                "type": "named",
-                "data": {
-                  "name": "RevUp"
-                }
-              },
-              {
                 "type": "path",
                 "data": {
                   "pathName": "In1"
@@ -52,7 +46,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
+            "name": "releasePreRollerNote"
           }
         },
         {
@@ -78,12 +72,6 @@
           "type": "parallel",
           "data": {
             "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "RevUp"
-                }
-              },
               {
                 "type": "path",
                 "data": {
@@ -123,12 +111,6 @@
           "data": {
             "commands": [
               {
-                "type": "named",
-                "data": {
-                  "name": "RevUp"
-                }
-              },
-              {
                 "type": "path",
                 "data": {
                   "pathName": "In3"
@@ -141,6 +123,12 @@
           "type": "named",
           "data": {
             "name": "Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stopAllCommand"
           }
         }
       ]

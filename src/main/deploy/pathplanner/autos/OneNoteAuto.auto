@@ -16,6 +16,12 @@
           "data": {
             "name": "RevUpAndShoot"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stopAllCommand"
+          }
         }
       ]
     }
