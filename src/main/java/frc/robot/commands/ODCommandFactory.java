@@ -30,7 +30,8 @@ public class ODCommandFactory {
     public Command revUpAndShootCommand(double waitSeconds){
         return new InstantCommand(() -> m_shooter.setShooterPower(0.8))
         .andThen(new WaitCommand(waitSeconds))
-        .andThen(new InstantCommand(() -> m_preRoller.setPreRollerPower(0.5)));
+        .andThen(new InstantCommand(() -> m_preRoller.setPreRollerPower(0.5)))
+        .andThen(new WaitCommand(0.2));
     }
 
 
@@ -47,7 +48,19 @@ public class ODCommandFactory {
         return new InstantCommand(() -> m_intake.stopIntake(), m_intake);
     }
 
-    public Command stopAllCommand(){
-        return new InstantCommand(() -> m_shooter.stopShooter(), m_shooter).andThen(new InstantCommand(() -> m_preRoller.stopPreRoller(), m_preRoller)).andThen(new InstantCommand(() -> m_intake.stopIntake(), m_intake));
+
+
+    public Command revUpShooter(){
+        return new InstantCommand(() -> m_shooter.setShooterPower(0.8));
     }
+
+    public Command fireNote(){
+        return new InstantCommand(() -> m_preRoller.setPreRollerPower(0.5)).andThen(new WaitCommand(0.75)).andThen(new InstantCommand(() -> m_preRoller.stopPreRoller(), m_preRoller));
+    }
+
+    public Command stopAllCommand(){
+        return new InstantCommand(() -> m_shooter.stopShooter(), m_shooter).alongWith(new InstantCommand(() -> m_preRoller.stopPreRoller(), m_preRoller)).alongWith(new InstantCommand(() -> m_intake.stopIntake(), m_intake));
+    }
+
+
 }

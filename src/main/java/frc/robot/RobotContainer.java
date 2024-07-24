@@ -114,6 +114,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("StopIntake", ODCommandFactory.stopIntakeSenseCommand());
     NamedCommands.registerCommand("RevUpAndShoot", ODCommandFactory.revUpAndShootCommand(2));
     NamedCommands.registerCommand("StopShooter", ODCommandFactory.stopShooterCommand());
+    NamedCommands.registerCommand("releasePreRollerCommand", ODCommandFactory.fireNote());
+    NamedCommands.registerCommand("stopAllCommand", ODCommandFactory.stopAllCommand());
 
     DriverStation.silenceJoystickConnectionWarning(true);
     
