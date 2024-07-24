@@ -171,9 +171,10 @@ private void configureButtonBindings() {
     DriverXButton.onTrue(new InstantCommand(() -> m_preRoller.setPreRollerPower(-1), m_preRoller));
     DriverXButton.onFalse(new InstantCommand(() -> m_preRoller.setPreRollerPower(0), m_preRoller));
 
-    DriverAButton.onTrue(new InstantCommand(() -> m_intake.setIntakePower(1), m_intake));
+    DriverAButton.onTrue(new InstantCommand(() -> m_intake.setIntakePower(0.5), m_intake));
     DriverAButton.onFalse(new InstantCommand(() -> m_intake.setIntakePower(0), m_intake));
-    DriverYButton.onTrue(new InstantCommand(() -> m_intake.setIntakePower(-1), m_intake));
+    DriverYButton.onTrue(new InstantCommand(() -> m_intake.setIntakePower(-0.5
+    ), m_intake));
     DriverYButton.onFalse(new InstantCommand(() -> m_intake.setIntakePower(0), m_intake));
 
     DriverLeftBumper.onTrue(new InstantCommand(() -> m_shooter.setShooterPower(-0.25), m_shooter));

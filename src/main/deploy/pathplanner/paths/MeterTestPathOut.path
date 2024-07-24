@@ -8,7 +8,7 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.05000000000000006,
+        "x": 1.0,
         "y": 0.0
       },
       "isLocked": false,
@@ -20,7 +20,7 @@
         "y": 0.0
       },
       "prevControl": {
-        "x": 0.95,
+        "x": 0.0,
         "y": 0.0
       },
       "nextControl": null,
@@ -28,13 +28,7 @@
       "linkedName": null
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0,
-      "rotationDegrees": 0,
-      "rotateFast": false
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -49,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "MeterTestPath",
+  "folder": null,
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

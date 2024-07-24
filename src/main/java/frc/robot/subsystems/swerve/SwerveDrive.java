@@ -98,8 +98,8 @@ public class SwerveDrive extends SubsystemBase {
       this::getRobotRelativeSpeeds,
       this::driveChassisSpeeds,
       new HolonomicPathFollowerConfig(
-              new PIDConstants(ModuleConstants.kDrivingP+6, ModuleConstants.kDrivingI+1, ModuleConstants.kDrivingD),
-              new PIDConstants(ModuleConstants.kTurningP+10, ModuleConstants.kTurningI, ModuleConstants.kTurningD),
+              new PIDConstants(ModuleConstants.kDrivingP+10, ModuleConstants.kDrivingI+2.5, ModuleConstants.kDrivingD+0.3),
+              new PIDConstants(ModuleConstants.kTurningP+3, ModuleConstants.kTurningI+2, ModuleConstants.kTurningD+0.4),
               AutoConstants.kMaxModuleSpeedMetersPerSecond,
               AutoConstants.kDriveBaseRadius,
               new ReplanningConfig()
