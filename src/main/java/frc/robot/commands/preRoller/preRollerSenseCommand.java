@@ -1,5 +1,9 @@
 package frc.robot.commands.preRoller;
 import java.util.LinkedList;
+
+import com.pathplanner.lib.util.PIDConstants;
+
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Shooter.preRoller;
@@ -7,22 +11,25 @@ import frc.robot.subsystems.Shooter.preRoller;
 public class preRollerSenseCommand extends Command {
 
     private LinkedList<Double> currentList = new LinkedList<>();
+    private PIDController preRollerPIDController;
     private long timerDelayMS;
     private double currentDeltaThreshold;
     private double runningAverage;
     private preRoller preRoller;
     private int sampleSize;
-    private double preRollerPower;
+    private double targetRPM;
     private boolean sampleSizeReached = false;
     private boolean timerStarted = false;
+
     private Timer timer = new Timer();
 
-    public preRollerSenseCommand(preRoller preRoller, double preRollerPower, double timerDelay, double currentDeltaThreshold, int sampleSize) {
+    public preRollerSenseCommand(preRoller preRoller, double targetRPM, double timerDelay, double currentDeltaThreshold, int sampleSize) {
         this.timerDelayMS = (long)(timerDelay * 1000);
         this.currentDeltaThreshold = currentDeltaThreshold;
-        this.preRoller = preRoller;
+        this.preRoller = preRoller; 
+        this.preRollerPIDController = preRoller.getPIDController();
         this.sampleSize = sampleSize;
-        this.preRollerPower = preRollerPower;
+        this.targetRPM = targetRPM;
         addRequirements(preRoller);
     }
 
@@ -34,16 +41,18 @@ public class preRollerSenseCommand extends Command {
         timerStarted = false;
         timer.stop();
         timer.reset();
-        preRoller.setPreRollerPower(preRollerPower);
+        preRollerPIDController.setSetpoint(targetRPM);
     }
 
     @Override
     public void execute() {
+
         currentList.add(preRoller.getOutputCurrent());
         if (currentList.size() > sampleSize) {
             currentList.removeFirst();
             sampleSizeReached = true;
         }
+        preRoller.setPreRollerPower(preRollerPIDController.calculate(preRoller.getRawMotorRPM()));
     }
 
     @Override

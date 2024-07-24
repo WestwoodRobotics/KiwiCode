@@ -59,15 +59,17 @@ public class preRoller extends SubsystemBase {
     @Override
     public void periodic() {
         if (UtilityConstants.debugMode){
-            if(!printed){
-                System.out.println("PreRoller Current: " + getOutputCurrent());
-                lastCurrent = this.getOutputCurrent();
-                printed = true;
-            }
-            else if(Math.abs(lastCurrent - preRollerMotor.getOutputCurrent()) > 10){
-                System.out.println("PreRoller Current: " + getOutputCurrent());
-                lastCurrent = this.getOutputCurrent();
-            }
+            // if(!printed){
+            //     System.out.println("PreRoller Current: " + getOutputCurrent());
+            //     lastCurrent = this.getOutputCurrent();
+            //     printed = true;
+            // }
+            // else if(Math.abs(lastCurrent - preRollerMotor.getOutputCurrent()) > 10){
+            //     System.out.println("PreRoller Current: " + getOutputCurrent());
+            //     lastCurrent = this.getOutputCurrent();
+            // }
+                //6180 RPM
+            System.out.println("Motor RPM: " + this.getRawMotorRPM());
         }
     }
 
@@ -76,24 +78,10 @@ public class preRoller extends SubsystemBase {
     }
 
     public void setHoldingNote(boolean isHoldingNote, Class<?> caller){
-        if ((caller.getClass().getName().equals("frc.robot.commands.preRoller.preRollerSenseCommand"))){
-            this.isHoldingNote = isHoldingNote;
-        } else {
-            throw new IllegalArgumentException("The caller must be either preRollerSenseCommand or shooterSenseCommand or intakeSenseCommand");
-        }
+         this.isHoldingNote = isHoldingNote;
     }
 
     public boolean getHoldingNote(Class<?> caller){
-        if ((caller.getClass().getName().equals("frc.robot.commands.preRoller.preRollerSenseCommand")) 
-            || (caller.getClass().getName().equals("frc.robot.commands.shooter.shooterSenseCommand"))
-            || (caller.getClass().getName().equals("frc.robot.commands.intake.intakeSenseCommand"))){
-            return isHoldingNote;
-        } else {
-            throw new IllegalArgumentException("The caller must be either preRollerSenseCommand or shooterSenseCommand or intakeSenseCommand");
-    }
-
-    
-
-    
+        return isHoldingNote;
     }
 }

@@ -4,6 +4,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -47,6 +48,8 @@ public class RobotContainer {
   private final Intake m_intake = new Intake();
   private final preRoller m_preRoller = new preRoller();
   private final TopBottomShooters m_shooter = new TopBottomShooters(false);
+  private final SendableChooser<Command> autoChooser;
+
 
   // LED for indicating robot state, not implemented in hardware.
 
@@ -123,19 +126,8 @@ public class RobotContainer {
     // m_robotDrive.setDefaultCommand(new driveCommand(m_robotDrive, m_driverController));
     
     m_robotDrive.setDefaultCommand(new driveCommand(m_robotDrive, m_driverController));
-    
-    
-
-    
-
-    // m_chooser.addOption("just shoot", justShootAuto());
-    // m_chooser.addOption("shoot pickup from middle shoot", shootPickupShoot());
-    // m_chooser.addOption("Three Notes (Preload, Amp & Middle)", centerNoteTopAuto());
-    // m_chooser.addOption("Three Notes (Preload, Source & Middle)", centerNoteBottomAuto());
-    // m_chooser.addOption("get middle notes out" , messUpNotesAuto());
-    // m_chooser.addOption("two note", twoNoteAuto());
-    
-    // SmartDashboard.putData(m_chooser);
+    autoChooser = AutoBuilder.buildAutoChooser();
+    SmartDashboard.putData("Auto Chooser", autoChooser);
 
   }
 
@@ -163,13 +155,19 @@ private void configureButtonBindings() {
     driverLeftTrigger.onTrue(ODCommandFactory.intakeSenseCommand());
     driverLeftTrigger.onFalse(ODCommandFactory.stopIntakeSenseCommand());
 
-    driverRightTrigger.onTrue(ODCommandFactory.revUpAndShootCommand(2));
+    driverRightTrigger.onTrue(ODCommandFactory.revUpShooter());
     driverRightTrigger.onFalse(ODCommandFactory.stopShooterCommand());
+
+    DriverRightBumper.onTrue(ODCommandFactory.revUpAndShootCommand(2));
+    DriverRightBumper.onFalse(ODCommandFactory.stopShooterCommand());
+
 
     DriverDPadDown.onTrue(new InstantCommand(() -> m_shooter.setShooterPower(-0.85), m_shooter));
 
-    DriverBButton.onTrue(new InstantCommand(() -> m_preRoller.setPreRollerPower(1), m_preRoller));
-    DriverBButton.onFalse(new InstantCommand(() -> m_preRoller.setPreRollerPower(0), m_preRoller));
+    // DriverBButton.onTrue(new InstantCommand(() -> m_preRoller.setPreRollerPower(1), m_preRoller));
+    // DriverBButton.onFalse(new InstantCommand(() -> m_preRoller.setPreRollerPower(0), m_preRoller));
+    DriverBButton.onTrue(ODCommandFactory.intakeSenseCommand());
+    DriverBButton.onFalse(ODCommandFactory.stopPreRollerCommand().alongWith(ODCommandFactory.stopIntakeCommand()));
     DriverXButton.onTrue(new InstantCommand(() -> m_preRoller.setPreRollerPower(-1), m_preRoller));
     DriverXButton.onFalse(new InstantCommand(() -> m_preRoller.setPreRollerPower(0), m_preRoller));
 
@@ -188,136 +186,14 @@ private void configureButtonBindings() {
   }
 
 //------------------------------------------- autonomous modes -------------------------------------------
-
-    public Command twoNoteAuto(){
-        Command toReturn = new SequentialCommandGroup(
-            new InstantCommand(() -> m_robotDrive.resetPose(new Pose2d(1.35,5.58, new Rotation2d(0)))),
-            new InstantCommand(() -> m_robotDrive.setGyroYawOffset(0))
-            // new PathPlannerAuto("TwoNoteAuton")
-        );
-        toReturn.setName("two note");
-        return toReturn;
-    }
-
-    // public Command justShootAuto(){
-    //    Command toReturn = new PathPlannerAuto("JustShootAuton");
-    //    toReturn.setName("just shoot");
-    //    return toReturn;
-    // }
-
-    public Command shootPickupShoot(){
-        Command toReturn = new SequentialCommandGroup(
-            new InstantCommand(() -> m_robotDrive.resetPose(new Pose2d(0.68,4.38, new Rotation2d(2*Math.PI/3)))),
-            new InstantCommand(() -> m_robotDrive.setGyroYawOffset(120))
-        );
-        toReturn.setName("shoot pickup from middle shoot");
-        return toReturn;
-    }
-
-    // public Command ampSide(){
-    //     return new SequentialCommandGroup(
-    //         new InstantCommand(() -> m_robotDrive.resetPose(new Pose2d(0.68,4.38, new Rotation2d(-Math.PI/3)))),
-    //         new InstantCommand(() -> m_robotDrive.setGyroYawOffset(60)),
-    //         new PathPlannerAuto("AmpSideAuton")
-    //     );
-    // }
-
-    // public Command testingOtherSideSubwoofer(){
-    //     return new SequentialCommandGroup(
-    //         new InstantCommand(() -> m_robotDrive.resetPose(new Pose2d(0.74,6.68, new Rotation2d(Math.PI/3)))),
-    //         new InstantCommand(() -> m_robotDrive.setGyroYawOffset(60)),
-    //         new PathPlannerAuto("TestingOtherSideSubwooferAuton")
-    //     );
-    // }
-
-	public Command centerNoteTopAuto(){
-        Command toReturn = new SequentialCommandGroup(
-            new InstantCommand(() -> m_robotDrive.resetPose(new Pose2d(1.09,5.56, new Rotation2d(0)))),
-            new InstantCommand(() -> m_robotDrive.setGyroYawOffset(0))
-            // new PathPlannerAuto("CenterTopNotesAuton")
-           );
-        toReturn.setName("Three Notes (Preload, Amp & Middle)");
-        return toReturn;
-    }
-
-    public Command centerNoteBottomAuto(){
-        Command toReturn = new SequentialCommandGroup(
-            new InstantCommand(() -> m_robotDrive.resetPose(new Pose2d(1.09,5.56, new Rotation2d(0)))),
-            new InstantCommand(() -> m_robotDrive.setGyroYawOffset(0))
-            // new PathPlannerAuto("CenterBottomNotesAuton")
-        );
-        toReturn.setName("Three Notes (Preload, Source & Middle)");
-        return toReturn;
-    }
-
-    public Command messUpNotesAuto(){
-        Command toReturn = new SequentialCommandGroup(
-            new InstantCommand(() -> m_robotDrive.resetPose(new Pose2d(1.34,5.58, new Rotation2d(0)))),
-            new InstantCommand(() -> m_robotDrive.setGyroYawOffset(0))
-            //new PathPlannerAuto("MoveCenterNotesAwayAuton")
-        );
-        toReturn.setName("get middle notes out");
-        return toReturn;
-    }
-
-    public Command ExampleAutoInOut(){
-        Command toReturn = new SequentialCommandGroup(
-            new InstantCommand(() -> m_robotDrive.resetPose(new Pose2d(1.34,4.56, new Rotation2d(90.0)))),
-            new InstantCommand(() -> m_robotDrive.setGyroYawOffset(90.0)),
-            new PathPlannerAuto("Spinny"),
-            new InstantCommand(() -> m_robotDrive.setGyroYawOffset(0.0))
-
-        );
-        toReturn.setName("Spinny");
-        return toReturn;
-    }
-
-    public Command InfinityAuto(){
-        Command toReturn = new SequentialCommandGroup(
-            new InstantCommand(() -> m_robotDrive.resetPose(new Pose2d(2.1,4.51, new Rotation2d(0.0)))),
-            new InstantCommand(() -> m_robotDrive.setGyroYawOffset(180.0)),
-            new PathPlannerAuto("InfinityAuto"),
-            new InstantCommand(() -> m_robotDrive.setGyroYawOffset(90.0))
-        );
-        toReturn.setName("InfinityAuto");
-        return toReturn;
-    }
-
+    
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
    */
 
-  public Command getAutonomousCommand() {
-    //return (new SequentialCommandGroup(new preRollerSenseCommand(m_preRoller, 1, 0.2, 40, 30).andThen(new WaitCommand(5).andThen(new preRollerSenseCommand(m_preRoller, 1, 0.2, 40, 30)))));
-    return ExampleAutoInOut();
-    // SmartDashboard.putString("selected auto", m_chooser.getSelected().getName());
-    // System.out.println(m_chooser.getSelected().getName());
-    // if(m_chooser.getSelected().getName().equals("two note")){
-    //     System.out.println("^");
-    //     return twoNoteAuto();
-    // }
-    // else if(m_chooser.getSelected().getName().equals("get middle notes out")){
-    //     System.out.println("^^");
-    //     return messUpNotesAuto();
-    // }
-    // else if(m_chooser.getSelected().getName().equals("Three Notes (Preload, Amp & Middle)")){
-    //     System.out.println("^^^");
-    //     return centerNoteTopAuto();
-    // }
-    // else if(m_chooser.getSelected().getName().equals("shoot pickup from middle shoot")){
-    //     System.out.println("^^^^");
-    //     return shootPickupShoot();
-    // }
-    // else if((m_chooser.getSelected().getName().equals("Three Notes (Preload, Source & Middle)"))){
-    //     System.out.println("^^^^^");
-    //     return centerNoteBottomAuto();
-    // }
-    // else{
-    //     System.out.println("^^^^^^^");
-    //     return justShootAuto();
-    // }
-    //return m_chooser.getSelected();
-  }
+    public Command getAutonomousCommand() {
+      return autoChooser.getSelected();
+    }
 }

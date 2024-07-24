@@ -150,12 +150,12 @@ public final class Constants {
 
   public static final class AutoConstants {
     //These constants need to tuned when setting up Auton Paths
-    public static final double kMaxModuleSpeedMetersPerSecond = 6.5;
+    public static final double kMaxModuleSpeedMetersPerSecond = 7;
      //Distance from the center of the robot to the farthest SwerveModule
     public static final double kDriveBaseRadius = 0.4; //meters
 
 
-    public static final double kMaxAccelerationMetersPerSecondSquared = 3.5;
+    public static final double kMaxAccelerationMetersPerSecondSquared = 6;
     public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
     public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
 
@@ -217,6 +217,6 @@ public final class Constants {
   }
 
   public static final class UtilityConstants {
-    public static final boolean debugMode = true;
+    public static final boolean debugMode = false;
   }
 }
