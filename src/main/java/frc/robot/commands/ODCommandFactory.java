@@ -21,12 +21,13 @@ public class ODCommandFactory {
     }
 
     public Command intakeSenseCommand(){
-        return new preRollerSenseCommand(m_preRoller, 6180, 0.1, 30, 30).raceWith(new intakePIDCommand(m_intake, 1000));
+        return new preRollerSenseCommand(m_preRoller, 4180, 0.3, 30, 50).alongWith(new InstantCommand(()->m_intake.setIntakePower(0.8)));
     }
 
     public Command stopIntakeSenseCommand(){
         return new InstantCommand(() -> m_intake.stopIntake(), m_intake).alongWith(new InstantCommand(() -> m_preRoller.stopPreRoller(), m_preRoller));
     }
+    
 
     public Command revUpAndShootCommand(double waitSeconds){
         return new InstantCommand(() -> m_shooter.setShooterPower(0.8))

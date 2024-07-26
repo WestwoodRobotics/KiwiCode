@@ -189,7 +189,7 @@ public final class Constants {
     public static final double kRPMConversionFactor = 1.0;
 
 
-    public static final double kP = 1;
+    public static final double kP = 0.0002;
     public static final double kI = 0;
     public static final double kD = 0;
   } 
@@ -211,7 +211,7 @@ public final class Constants {
     public static final double kBottomRollerI = 0;
     public static final double kBottomRollerD = 0;
 
-    public static final double kPreRollerP = 1;
+    public static final double kPreRollerP = 0.0002;
     public static final double kPreRollerI = 0;
     public static final double kPreRollerD = 0;
   }
