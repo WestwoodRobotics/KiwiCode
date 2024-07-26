@@ -117,7 +117,6 @@ public class RobotContainer {
     NamedCommands.registerCommand("StopShooter", ODCommandFactory.stopShooterCommand());
     NamedCommands.registerCommand("releasePreRollerCommand", ODCommandFactory.fireNote());
     NamedCommands.registerCommand("stopAllCommand", ODCommandFactory.stopAllCommand());
-
     DriverStation.silenceJoystickConnectionWarning(true);
     
     // Configure default commands 

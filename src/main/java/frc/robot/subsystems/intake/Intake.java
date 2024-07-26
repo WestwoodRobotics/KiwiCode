@@ -3,6 +3,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
+import frc.robot.Constants.UtilityConstants;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkBase;
@@ -18,6 +19,7 @@ public class Intake extends SubsystemBase {
                                                IntakeConstants.kI, 
                                                IntakeConstants.kD);
     }
+
 
 
     public void setIntakePower(double power) {
@@ -42,7 +44,10 @@ public class Intake extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Intake RPM", getRPM());
+        if (UtilityConstants.debugMode){
+            SmartDashboard.putNumber("Intake RPM", getRPM());
+            SmartDashboard.putNumber("Intake Current", intakeMotor.getOutputCurrent());
+        }
     }
 
 }

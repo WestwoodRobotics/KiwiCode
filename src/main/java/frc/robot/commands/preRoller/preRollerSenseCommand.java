@@ -1,8 +1,5 @@
 package frc.robot.commands.preRoller;
 import java.util.LinkedList;
-
-import com.pathplanner.lib.util.PIDConstants;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
