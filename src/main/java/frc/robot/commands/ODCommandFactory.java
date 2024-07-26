@@ -33,7 +33,6 @@ public class ODCommandFactory {
         .andThen(new WaitCommand(waitSeconds))
         .andThen(new InstantCommand(() -> m_preRoller.setPreRollerPower(0.5)))
         .andThen(new WaitCommand(0.2));
-        
     }
 
 
@@ -59,7 +58,7 @@ public class ODCommandFactory {
     }
 
     public Command stopAllCommand(){
-        return new InstantCommand(() -> m_shooter.stopShooter(), m_shooter).alongWith(new InstantCommand(() -> m_preRoller.stopPreRoller(), m_preRoller)).alongWith(new InstantCommand(() -> m_intake.stopIntake(), m_intake));
+        return new InstantCommand(() -> m_shooter.stopShooter(), m_shooter).alongWith(this.stopIntakeSenseCommand());
     }
 
 

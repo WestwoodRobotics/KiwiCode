@@ -6,6 +6,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.UtilityConstants;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class preRoller extends SubsystemBase {
@@ -68,8 +69,11 @@ public class preRoller extends SubsystemBase {
             //     System.out.println("PreRoller Current: " + getOutputCurrent());
             //     lastCurrent = this.getOutputCurrent();
             // }
-                //6180 RPM
-            System.out.println("Motor RPM: " + this.getRawMotorRPM());
+
+            //System.out.println("Motor RPM: " + this.getRawMotorRPM());
+
+            SmartDashboard.putNumber("PreRoller Current", getOutputCurrent());
+            SmartDashboard.putNumber("PreRoller RPM", getRPM());
         }
     }
 
