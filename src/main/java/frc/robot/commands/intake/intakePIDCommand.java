@@ -1,31 +1,31 @@
 package frc.robot.commands.intake;
 
-import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.sensors.DIO.BeamBreak;
-import frc.robot.subsystems.Shooter.preRoller;
 import frc.robot.subsystems.intake.Intake;
 
+public class intakePIDCommand extends Command{
 
-public class UTBSpitCommand extends Command{
-    
+    private double targetRPM;
     private Intake intake;
+    private PIDController intakePIDController;
+    
 
-
-    public UTBSpitCommand(Intake intake) {
+    public intakePIDCommand(Intake intake, double targetRPM){
         this.intake = intake;
+        this.targetRPM = targetRPM;
+        this.intakePIDController = intake.getPIDController();
         addRequirements(intake);
     }
 
     @Override
     public void initialize() {
-        intake.setIntakePower(-1.0);
+        intakePIDController.setSetpoint(targetRPM);
     }
-
 
     @Override
     public void execute() {
-        
+        intake.setIntakePower(intakePIDController.calculate(intake.getRawMotorRPM()));
     }
 
     @Override
@@ -37,6 +37,11 @@ public class UTBSpitCommand extends Command{
     public void end(boolean interrupted) {
         intake.stopIntake();
     }
+
     
+
+
+
+
     
 }

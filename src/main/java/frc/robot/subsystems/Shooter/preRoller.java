@@ -77,11 +77,11 @@ public class preRoller extends SubsystemBase {
         currentCurrentOffset = getOutputCurrent();
     }
 
-    public void setHoldingNote(boolean isHoldingNote, Class<?> caller){
+    public void setHoldingNote(boolean isHoldingNote){
          this.isHoldingNote = isHoldingNote;
     }
 
-    public boolean getHoldingNote(Class<?> caller){
+    public boolean getHoldingNote(){
         return isHoldingNote;
     }
 }

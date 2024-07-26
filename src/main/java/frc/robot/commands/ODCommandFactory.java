@@ -3,24 +3,25 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.commands.intake.intakePIDCommand;
 import frc.robot.commands.preRoller.preRollerSenseCommand;
-import frc.robot.subsystems.Shooter.TopBottomShooters;
+import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.preRoller;
 import frc.robot.subsystems.intake.Intake;
 
 public class ODCommandFactory {
     private final Intake m_intake;
     private final preRoller m_preRoller;
-    private final TopBottomShooters m_shooter;
+    private final Shooter m_shooter;
 
-    public ODCommandFactory(Intake m_intake, preRoller m_preRoller, TopBottomShooters m_shooter){
+    public ODCommandFactory(Intake m_intake, preRoller m_preRoller, Shooter m_shooter){
         this.m_intake = m_intake;
         this.m_preRoller = m_preRoller;
         this.m_shooter = m_shooter;
     }
 
     public Command intakeSenseCommand(){
-        return new preRollerSenseCommand(m_preRoller, 6180, 0.1, 30, 30).alongWith(new InstantCommand(() -> m_intake.setIntakePower(0.4), m_intake)).andThen(new WaitCommand(0.5)).andThen(new InstantCommand(() -> m_intake.stopIntake(), m_intake));
+        return new preRollerSenseCommand(m_preRoller, 6180, 0.1, 30, 30).raceWith(new intakePIDCommand(m_intake, 1000));
     }
 
     public Command stopIntakeSenseCommand(){
@@ -32,6 +33,7 @@ public class ODCommandFactory {
         .andThen(new WaitCommand(waitSeconds))
         .andThen(new InstantCommand(() -> m_preRoller.setPreRollerPower(0.5)))
         .andThen(new WaitCommand(0.2));
+        
     }
 
 
@@ -47,8 +49,6 @@ public class ODCommandFactory {
     public Command stopIntakeCommand(){
         return new InstantCommand(() -> m_intake.stopIntake(), m_intake);
     }
-
-
 
     public Command revUpShooter(){
         return new InstantCommand(() -> m_shooter.setShooterPower(0.8));

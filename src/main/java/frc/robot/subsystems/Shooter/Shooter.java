@@ -8,7 +8,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
-public class TopBottomShooters extends SubsystemBase {
+public class Shooter extends SubsystemBase {
 
     private CANSparkFlex topRoller;
     private CANSparkFlex bottomRoller;
@@ -22,7 +22,7 @@ public class TopBottomShooters extends SubsystemBase {
 
     private double BottomRollerRPMSetpoint;
 
-    public TopBottomShooters(boolean isPIDControl) {
+    public Shooter(boolean isPIDControl) {
         topRoller = new CANSparkFlex(ShooterConstants.kTopRollerPort, MotorType.kBrushless);
         bottomRoller = new CANSparkFlex(ShooterConstants.kBottomRollerPort, MotorType.kBrushless);
         this.isPIDCOntrol = isPIDControl;

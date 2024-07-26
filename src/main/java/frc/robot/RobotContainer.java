@@ -24,11 +24,9 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.PortConstants;
 import frc.robot.commands.ODCommandFactory;
-import frc.robot.commands.intake.UTBIntakeCommand;
-import frc.robot.commands.preRoller.preRollerIntakeCommand;
 import frc.robot.commands.preRoller.preRollerSenseCommand;
 import frc.robot.commands.swerve.driveCommand;
-import frc.robot.subsystems.Shooter.TopBottomShooters;
+import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.preRoller;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.swerve.SwerveDrive;
@@ -47,7 +45,7 @@ public class RobotContainer {
   public final SwerveDrive m_robotDrive = new SwerveDrive();
   private final Intake m_intake = new Intake();
   private final preRoller m_preRoller = new preRoller();
-  private final TopBottomShooters m_shooter = new TopBottomShooters(false);
+  private final Shooter m_shooter = new Shooter(false);
   private final SendableChooser<Command> autoChooser;
 
 

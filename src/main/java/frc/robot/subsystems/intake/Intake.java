@@ -39,10 +39,6 @@ public class Intake extends SubsystemBase {
         return PIDController;
     }
 
-    
-
-
-
     @Override
     public void periodic() {
     

@@ -76,7 +76,7 @@ public class preRollerSenseCommand extends Command {
     @Override
     public void end(boolean interrupted) {
         preRoller.stopPreRoller();
-        preRoller.setHoldingNote(true, this.getClass());
+        preRoller.setHoldingNote(true);
         runningAverage = 0;
         currentList.clear();
         timerStarted = false;
