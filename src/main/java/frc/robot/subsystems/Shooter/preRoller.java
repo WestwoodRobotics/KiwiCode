@@ -43,9 +43,9 @@ public class preRoller extends SubsystemBase {
         return preRollerMotor.getEncoder().getVelocity();
     }
 
-    public double getRPM(){
-        return getRawMotorRPM() * ShooterConstants.kPreRollerRPMConversionFactor;
-    }
+    // public double getRPM(){
+    //     return getRawMotorRPM() * ShooterConstants.kPreRollerRPMConversionFactor;
+    // }
 
     public PIDController getPIDController(){
         return PIDController;
@@ -73,7 +73,7 @@ public class preRoller extends SubsystemBase {
             //System.out.println("Motor RPM: " + this.getRawMotorRPM());
 
             SmartDashboard.putNumber("PreRoller Current", getOutputCurrent());
-            SmartDashboard.putNumber("PreRoller RPM", getRPM());
+            SmartDashboard.putNumber("PreRoller RPM", getRawMotorRPM());
         }
     }
 

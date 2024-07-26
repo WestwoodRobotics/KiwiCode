@@ -1,6 +1,7 @@
 package frc.robot.subsystems.Shooter;
 
 import com.revrobotics.CANSparkFlex;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import frc.robot.Constants.ShooterConstants;
@@ -26,6 +27,8 @@ public class Shooter extends SubsystemBase {
         topRoller = new CANSparkFlex(ShooterConstants.kTopRollerPort, MotorType.kBrushless);
         bottomRoller = new CANSparkFlex(ShooterConstants.kBottomRollerPort, MotorType.kBrushless);
         this.isPIDCOntrol = isPIDControl;
+        topRoller.setIdleMode(IdleMode.kBrake); bottomRoller.setIdleMode(IdleMode.kBrake);
+        
 
         this.TopRollerPIDController = new PIDController(ShooterConstants.kTopRollerP, 
                                                         ShooterConstants.kTopRollerI, 

@@ -211,7 +211,7 @@ public final class Constants {
     public static final double kBottomRollerI = 0;
     public static final double kBottomRollerD = 0;
 
-    public static final double kPreRollerP = 0.0002;
+    public static final double kPreRollerP = 0.0004;
     public static final double kPreRollerI = 0;
     public static final double kPreRollerD = 0;
   }

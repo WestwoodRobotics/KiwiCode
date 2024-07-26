@@ -21,7 +21,7 @@ public class ODCommandFactory {
     }
 
     public Command intakeSenseCommand(){
-        return new preRollerSenseCommand(m_preRoller, 4180, 0.3, 30, 50).alongWith(new InstantCommand(()->m_intake.setIntakePower(0.8)));
+        return new preRollerSenseCommand(m_preRoller, 6180, 0.1, 30, 50).alongWith(new InstantCommand(()->m_intake.setIntakePower(0.8)));
     }
 
     public Command stopIntakeSenseCommand(){
