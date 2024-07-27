@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.intake.intakePIDCommand;
 import frc.robot.commands.preRoller.preRollerSenseCommand;
@@ -22,7 +23,7 @@ public class ODCommandFactory {
     }
 
     public Command intakeSenseCommand(){
-        return new preRollerSenseCommand(m_preRoller, 6180, 0.1, 30, 50).alongWith(new InstantCommand(()->m_intake.setIntakePower(0.8)));
+        return new preRollerSenseCommand(m_preRoller, 6180, 0.1, 20, 30).alongWith(new InstantCommand(()->m_intake.setIntakePower(0.8)));
     }
 
     public Command stopIntakeSenseCommand(){
@@ -31,9 +32,9 @@ public class ODCommandFactory {
     
 
     public Command revUpAndShootCommand(double waitSeconds){
-        return new InstantCommand(() -> m_shooter.setShooterPower(0.8))
+        return new InstantCommand(() -> m_shooter.setShooterPower(0.75))
         .andThen(new WaitCommand(waitSeconds))
-        .andThen(new InstantCommand(() -> m_preRoller.setPreRollerPower(0.5)))
+        .andThen(new InstantCommand(() -> m_preRoller.setPreRollerPower(0.7)))
         .andThen(new WaitCommand(0.2));
     }
 

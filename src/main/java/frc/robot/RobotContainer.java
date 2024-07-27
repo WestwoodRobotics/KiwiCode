@@ -114,7 +114,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("SpinSensePreRoller", ODCommandFactory.intakeSenseCommand());
     NamedCommands.registerCommand("Intake", ODCommandFactory.intakeSenseCommand());
     NamedCommands.registerCommand("StopIntake", ODCommandFactory.stopIntakeSenseCommand());
-    NamedCommands.registerCommand("RevUpAndShoot", ODCommandFactory.revUpAndShootCommand(2));
+    NamedCommands.registerCommand("RevUpAndShoot", ODCommandFactory.revUpAndShootCommand(1.2));
     NamedCommands.registerCommand("StopShooter", ODCommandFactory.stopShooterCommand());
     NamedCommands.registerCommand("releasePreRollerCommand", ODCommandFactory.fireNote());
     NamedCommands.registerCommand("stopAllCommand", ODCommandFactory.stopAllCommand());
