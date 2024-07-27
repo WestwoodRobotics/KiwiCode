@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.intake.intakePIDCommand;
 import frc.robot.commands.preRoller.preRollerSenseCommand;
+import frc.robot.commands.shooter.shooterPIDCommand;
 import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.preRoller;
 import frc.robot.subsystems.intake.Intake;
@@ -34,6 +35,12 @@ public class ODCommandFactory {
         return new InstantCommand(() -> m_shooter.setShooterPower(0.75))
         .andThen(new WaitCommand(waitSeconds))
         .andThen(new InstantCommand(() -> m_preRoller.setPreRollerPower(0.7)))
+        .andThen(new WaitCommand(0.2));
+    }
+
+    private Command revUpAndShootPIDCommand(double targetRPM){
+        return new shooterPIDCommand(m_shooter, targetRPM)
+        .andThen(new InstantCommand(() -> m_preRoller.setPreRollerPower(0.5)))
         .andThen(new WaitCommand(0.2));
     }
 

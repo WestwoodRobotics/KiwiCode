@@ -5,7 +5,9 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.Constants.UtilityConstants;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
@@ -103,6 +105,14 @@ public class Shooter extends SubsystemBase {
     
     @Override
     public void periodic() {
+
+        if (UtilityConstants.debugMode){
+            SmartDashboard.putNumber("Top Roller RPM", getTopRollerMotorRawRPM());
+            SmartDashboard.putNumber("Bottom Roller RPM", getBottomRollerMotorRawRPM());
+            SmartDashboard.putNumber("Top Roller Current", topRoller.getOutputCurrent());
+            SmartDashboard.putNumber("Bottom Roller Current", bottomRoller.getOutputCurrent());
+
+        }
     
     }
 

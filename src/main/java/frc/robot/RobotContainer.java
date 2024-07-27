@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.PortConstants;
 import frc.robot.commands.ODCommandFactory;
 import frc.robot.commands.preRoller.preRollerSenseCommand;
+import frc.robot.commands.shooter.shooterPIDCommand;
 import frc.robot.commands.swerve.driveCommand;
 import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.preRoller;
@@ -45,7 +46,7 @@ public class RobotContainer {
   public final SwerveDrive m_robotDrive = new SwerveDrive();
   private final Intake m_intake = new Intake();
   private final preRoller m_preRoller = new preRoller();
-  private final Shooter m_shooter = new Shooter(false);
+  protected final Shooter m_shooter = new Shooter(false);
   private final SendableChooser<Command> autoChooser;
 
 
@@ -123,7 +124,13 @@ public class RobotContainer {
     // m_robotDrive.setDefaultCommand(new driveCommand(m_robotDrive, m_driverController));
     
     m_robotDrive.setDefaultCommand(new driveCommand(m_robotDrive, m_driverController));
+
     autoChooser = AutoBuilder.buildAutoChooser();
+
+    //if in auto set the default command of the shooter subsystem to be the shooterPIDCommand
+
+
+
     SmartDashboard.putData("Auto Chooser", autoChooser);
 
   }
