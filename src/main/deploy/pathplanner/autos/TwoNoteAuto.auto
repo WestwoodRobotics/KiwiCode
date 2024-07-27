@@ -45,7 +45,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
+            "name": "releasePreRollerCommand"
           }
         },
         {

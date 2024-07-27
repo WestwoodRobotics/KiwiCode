@@ -20,8 +20,26 @@
                 "data": {
                   "name": "Intake"
                 }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Out1"
+                }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "RevUpAndShoot"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.1
           }
         },
         {
