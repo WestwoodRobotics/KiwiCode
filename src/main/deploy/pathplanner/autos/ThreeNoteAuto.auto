@@ -45,7 +45,7 @@
         {
           "type": "named",
           "data": {
-            "name": "releasePreRollerCommand"
+            "name": "RevUpAndShoot"
           }
         },
         {
@@ -76,7 +76,7 @@
         {
           "type": "named",
           "data": {
-            "name": "releasePreRollerCommand"
+            "name": "RevUpAndShoot"
           }
         },
         {

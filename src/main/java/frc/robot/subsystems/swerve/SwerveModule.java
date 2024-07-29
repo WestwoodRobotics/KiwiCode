@@ -153,6 +153,10 @@ public class SwerveModule {
   public double getDriveEncoderPosition() {
     return drivingMotorEncoder.getPosition();
   }
+
+  public double getDriveEncoderVelocity() {
+    return drivingMotorEncoder.getVelocity();
+  }
   
   public double getTurningEncoderPosition() {
     return turningMotorEncoder.getPosition();

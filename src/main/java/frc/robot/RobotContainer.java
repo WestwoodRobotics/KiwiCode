@@ -9,6 +9,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -114,10 +115,11 @@ public class RobotContainer {
     NamedCommands.registerCommand("SpinSensePreRoller", ODCommandFactory.intakeSenseCommand());
     NamedCommands.registerCommand("Intake", ODCommandFactory.intakeSenseCommand());
     NamedCommands.registerCommand("StopIntake", ODCommandFactory.stopIntakeSenseCommand());
-    NamedCommands.registerCommand("RevUpAndShoot", ODCommandFactory.revUpAndShootCommand(1.2));
+    NamedCommands.registerCommand("RevUpAndShoot", ODCommandFactory.revUpAndShootCommand(0.75, 4000));
     NamedCommands.registerCommand("StopShooter", ODCommandFactory.stopShooterCommand());
     NamedCommands.registerCommand("releasePreRollerCommand", ODCommandFactory.fireNote());
     NamedCommands.registerCommand("stopAllCommand", ODCommandFactory.stopAllCommand());
+    NamedCommands.registerCommand("resetPosition", new InstantCommand(() -> m_robotDrive.resetPose(new Pose2d(new Translation2d(1.31, m_robotDrive.getPose().getY()), new Rotation2d(Math.toRadians(0))))));
     DriverStation.silenceJoystickConnectionWarning(true);
     
     // Configure default commands 
@@ -162,7 +164,7 @@ private void configureButtonBindings() {
     driverRightTrigger.onTrue(ODCommandFactory.revUpShooter());
     driverRightTrigger.onFalse(ODCommandFactory.stopShooterCommand());
 
-    DriverRightBumper.onTrue(ODCommandFactory.revUpAndShootCommand(2));
+    DriverRightBumper.onTrue(ODCommandFactory.revUpAndShootCommand(0.75, 4000));
     DriverRightBumper.onFalse(ODCommandFactory.stopShooterCommand());
 
 

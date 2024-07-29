@@ -98,8 +98,8 @@ public class SwerveDrive extends SubsystemBase {
       this::getRobotRelativeSpeeds,
       this::driveChassisSpeeds,
       new HolonomicPathFollowerConfig(
-              new PIDConstants(ModuleConstants.kDrivingP+10, ModuleConstants.kDrivingI+2.5, ModuleConstants.kDrivingD+0.3),
-              new PIDConstants(ModuleConstants.kTurningP+3, ModuleConstants.kTurningI+2, ModuleConstants.kTurningD+0.4),
+              new PIDConstants(5, 0.2, 0),
+              new PIDConstants(2, 0.1, 0),
               AutoConstants.kMaxModuleSpeedMetersPerSecond,
               AutoConstants.kDriveBaseRadius,
               new ReplanningConfig()
@@ -134,7 +134,8 @@ public class SwerveDrive extends SubsystemBase {
     SmartDashboard.putNumber("X Gyro Angle", gyroSubsystem.getRawGyroObject().getXAngle());
     SmartDashboard.putNumber("Y Gyro Angle", gyroSubsystem.getRawGyroObject().getYAngle());
     fieldVisualization.setRobotPose(getPose());
-    SmartDashboard.putNumber("Module Velocity", frontLeftSwerveModule.getDriveEncoder().getVelocity());
+    SmartDashboard.putNumber("FL Module Velocity", frontRightSwerveModule.getState().speedMetersPerSecond);
+    
   }
 
   /**
@@ -187,16 +188,19 @@ public class SwerveDrive extends SubsystemBase {
     double xSpeedCommanded = xSpeed * DriveConstants.kMaxSpeedMetersPerSecond;
     double ySpeedCommanded = ySpeed * DriveConstants.kMaxSpeedMetersPerSecond;
     double rotCommanded = rot * DriveConstants.kMaxAngularSpeed;
+    
     SwerveModuleState[] swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
         fieldRelative
             ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedCommanded, ySpeedCommanded, rotCommanded, Rotation2d.fromDegrees(gyroSubsystem.getRawGyroObject().getZAngle()))
             : new ChassisSpeeds(xSpeedCommanded, ySpeedCommanded, rotCommanded));
+
     SwerveDriveKinematics.desaturateWheelSpeeds(
         swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
     frontLeftSwerveModule.setDesiredState(swerveModuleStates[0]);
     frontRightSwerveModule.setDesiredState(swerveModuleStates[1]);
     rearLeftSwerveModule.setDesiredState(swerveModuleStates[2]);
     rearRightSwerveModule.setDesiredState(swerveModuleStates[3]);
+SmartDashboard.putNumber("module velocity ref", swerveModuleStates[1].speedMetersPerSecond);
   }
 
   /**

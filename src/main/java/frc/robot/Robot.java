@@ -58,7 +58,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_robotContainer.m_shooter.removeDefaultCommand();
-    m_robotContainer.m_shooter.setDefaultCommand(new shooterPIDCommand(m_robotContainer.m_shooter, 1000));
+    //m_robotContainer.m_shooter.setDefaultCommand(new shooterPIDCommand(m_robotContainer.m_shooter, 1000));
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     /*
@@ -85,6 +85,7 @@ public class Robot extends TimedRobot {
     // continue until interrupted by another command, remove
     // this line or comment it out.
     m_robotContainer.m_shooter.removeDefaultCommand();
+    m_robotContainer.m_shooter.stopShooter();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }

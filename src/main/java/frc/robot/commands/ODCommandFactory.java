@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.intake.intakePIDCommand;
@@ -31,17 +32,11 @@ public class ODCommandFactory {
     }
     
 
-    public Command revUpAndShootCommand(double waitSeconds){
-        return new InstantCommand(() -> m_shooter.setShooterPower(0.75))
-        .andThen(new WaitCommand(waitSeconds))
+    public Command revUpAndShootCommand(double power, double targetRPM){
+        return new shooterPIDComshuffsmand(m_shooter, power, targetRPM)
         .andThen(new InstantCommand(() -> m_preRoller.setPreRollerPower(0.7)))
-        .andThen(new WaitCommand(0.2));
-    }
-
-    private Command revUpAndShootPIDCommand(double targetRPM){
-        return new shooterPIDCommand(m_shooter, targetRPM)
-        .andThen(new InstantCommand(() -> m_preRoller.setPreRollerPower(0.5)))
-        .andThen(new WaitCommand(0.2));
+        .andThen(new WaitCommand(0.6))
+        .andThen(new InstantCommand(()-> m_shooter.setShooterPower(40)).alongWith(new InstantCommand(() -> m_preRoller.stopPreRoller())));
     }
 
 
@@ -68,6 +63,10 @@ public class ODCommandFactory {
 
     public Command stopAllCommand(){
         return new InstantCommand(() -> m_shooter.stopShooter(), m_shooter).alongWith(this.stopIntakeSenseCommand());
+    }
+
+    public ParallelCommandGroup stuff(){
+        return new ParallelCommandGroup(null)
     }
 
 
