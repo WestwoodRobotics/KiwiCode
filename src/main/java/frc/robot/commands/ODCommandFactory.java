@@ -33,7 +33,7 @@ public class ODCommandFactory {
     
 
     public Command revUpAndShootCommand(double power, double targetRPM){
-        return new shooterPIDComshuffsmand(m_shooter, power, targetRPM)
+        return new shooterPIDCommand(m_shooter, power, targetRPM)
         .andThen(new InstantCommand(() -> m_preRoller.setPreRollerPower(0.7)))
         .andThen(new WaitCommand(0.6))
         .andThen(new InstantCommand(()-> m_shooter.setShooterPower(40)).alongWith(new InstantCommand(() -> m_preRoller.stopPreRoller())));
@@ -64,10 +64,5 @@ public class ODCommandFactory {
     public Command stopAllCommand(){
         return new InstantCommand(() -> m_shooter.stopShooter(), m_shooter).alongWith(this.stopIntakeSenseCommand());
     }
-
-    public ParallelCommandGroup stuff(){
-        return new ParallelCommandGroup(null)
-    }
-
 
 }
