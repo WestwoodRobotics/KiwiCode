@@ -1,5 +1,10 @@
 package frc.robot.subsystems.utils;
 
+/**
+ * The SwerveUtils class provides utility methods for swerve drive calculations.
+ * It includes methods for stepping values towards targets, handling circular angles,
+ * and wrapping angles within a specified range.
+ */
 public class SwerveUtils {
 
     /**
