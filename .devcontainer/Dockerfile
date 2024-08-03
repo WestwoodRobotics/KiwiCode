@@ -2,6 +2,7 @@ FROM ubuntu:22.04
 
 # Install wget
 RUN apt-get update && apt-get install -y wget
+
 RUN apt install -y openjdk-21-jre
 
 # Extract year and version from the URL
@@ -18,4 +19,6 @@ RUN VERSION=$(echo $URL | grep -oP 'v\K[0-9]{4}\.[0-9]+\.[0-9]+') && \
     mkdir -p ~/wpilib && \
     mv ${VERSION%%.*} ~/wpilib && \
     rm -rf WPILib_Linux-*
+
+CMD ["tail", "-f", "/dev/null"]
 
