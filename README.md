@@ -24,3 +24,7 @@ These values can be adjusted in the `Constants.java` file.
 ## Codespace Creation Process
 
 The new codespace creation process uses the latest Ubuntu 22 distro, downloads and extracts the specified file, and replaces year and version references dynamically.
+
+## Dockerfile Note
+
+The Dockerfile now includes the installation of the `wget` package to ensure it is available for use during the container creation process.
