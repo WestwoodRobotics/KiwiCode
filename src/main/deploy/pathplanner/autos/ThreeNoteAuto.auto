@@ -76,7 +76,7 @@
         {
           "type": "named",
           "data": {
-            "name": "RevUpAndShoot"
+            "name": "checkAutoAndShoot"
           }
         },
         {
