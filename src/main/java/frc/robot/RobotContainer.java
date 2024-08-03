@@ -103,7 +103,7 @@ public class RobotContainer {
       XboxController.Button.kLeftBumper.value);
 
   private SendableChooser<Command> m_chooser = new SendableChooser<>();
-  private ODCommandFactory ODCommandFactory = new ODCommandFactory(m_intake, m_preRoller, m_shooter);
+  protected ODCommandFactory ODCommandFactory = new ODCommandFactory(m_intake, m_preRoller, m_shooter);
 
 
   /**
@@ -120,6 +120,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("releasePreRollerCommand", ODCommandFactory.fireNote());
     NamedCommands.registerCommand("stopAllCommand", ODCommandFactory.stopAllCommand());
     NamedCommands.registerCommand("resetPosition", new InstantCommand(() -> m_robotDrive.resetPose(new Pose2d(new Translation2d(1.31, m_robotDrive.getPose().getY()), new Rotation2d(Math.toRadians(0))))));
+    NamedCommands.registerCommand("checkAutoAndShoot", ODCommandFactory.checkAutoAndShoot());
     DriverStation.silenceJoystickConnectionWarning(true);
     
     // Configure default commands 

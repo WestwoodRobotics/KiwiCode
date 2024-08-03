@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -20,6 +21,7 @@ public class ODCommandFactory {
     private final Intake m_intake;
     private final preRoller m_preRoller;
     private final Shooter m_shooter;
+    private static final Timer m_timer = new Timer();
 
     /**
      * Constructs a new ODCommandFactory.
@@ -119,6 +121,30 @@ public class ODCommandFactory {
      */
     public Command stopAllCommand(){
         return new InstantCommand(() -> m_shooter.stopShooter(), m_shooter).alongWith(this.stopIntakeSenseCommand());
+    }
+
+    public void startTimer(){
+        m_timer.start();
+    }
+
+    public void stopTimer(){
+        m_timer.stop();
+    }
+
+    public void resetTimer(){
+        m_timer.reset();
+    }
+
+    public double getTimer(){
+        return m_timer.get();
+    }
+
+
+    public Command checkAutoAndShoot(){
+        if (m_timer.get() > 14.5){
+            return stopAllCommand();
+        }
+        return revUpAndShootCommand(0.75, 4000);
     }
 
 }
