@@ -34,6 +34,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 public class SwerveDrive extends SubsystemBase {
 
   private Gyro gyroSubsystem;
+  private boolean isSlowMode;
 
   // Swerve modules
   private final SwerveModule frontLeftSwerveModule = new SwerveModule(
@@ -78,6 +79,7 @@ public class SwerveDrive extends SubsystemBase {
    * Initializes a new instance of the SwerveDrive class.
    */
   public SwerveDrive() {
+    isSlowMode = false;
     try {
       gyroSubsystem = new Gyro();
     } catch (NullPointerException e) {
@@ -138,7 +140,7 @@ public class SwerveDrive extends SubsystemBase {
    * Gets the current pose of the robot.
    * 
    * @return The current pose of the robot.
-   */
+   */ 
   public Pose2d getPose() {
     return swerveDriveOdometry.getPoseMeters();
   }
@@ -336,5 +338,12 @@ SmartDashboard.putNumber("module velocity ref", swerveModuleStates[1].speedMeter
 
   public boolean isYuMode(){
     return isYuMode;
+  }
+
+  public boolean getSlowMode(){
+    return isSlowMode;
+  }
+  public void toggleSlowMode(){
+    isSlowMode = !(isSlowMode);
   }
 }

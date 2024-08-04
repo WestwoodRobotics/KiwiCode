@@ -44,7 +44,7 @@ import frc.robot.subsystems.swerve.SwerveDrive;
  */
 public class RobotContainer {
 
-  public final SwerveDrive m_robotDrive = new SwerveDrive();
+  protected final SwerveDrive m_robotDrive = new SwerveDrive();
   private final Intake m_intake = new Intake();
   private final preRoller m_preRoller = new preRoller();
   protected final Shooter m_shooter = new Shooter(false);
@@ -121,6 +121,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("stopAllCommand", ODCommandFactory.stopAllCommand());
     NamedCommands.registerCommand("resetPosition", new InstantCommand(() -> m_robotDrive.resetPose(new Pose2d(new Translation2d(1.31, m_robotDrive.getPose().getY()), new Rotation2d(Math.toRadians(0))))));
     NamedCommands.registerCommand("checkAutoAndShoot", ODCommandFactory.checkAutoAndShoot());
+    NamedCommands.registerCommand("resetGyro", new InstantCommand(() -> m_robotDrive.resetGyro()));
+
     DriverStation.silenceJoystickConnectionWarning(true);
     
     // Configure default commands 
@@ -173,10 +175,9 @@ private void configureButtonBindings() {
 
     // DriverBButton.onTrue(new InstantCommand(() -> m_preRoller.setPreRollerPower(1), m_preRoller));
     // DriverBButton.onFalse(new InstantCommand(() -> m_preRoller.setPreRollerPower(0), m_preRoller));
-    DriverBButton.onTrue(ODCommandFactory.intakeSenseCommand());
+    DriverBButton.onTrue(ODCommandFactory.intakeSenseCommand().alongWith(new InstantCommand(() -> m_robotDrive.toggleSlowMode())));
     DriverBButton.onFalse(ODCommandFactory.stopPreRollerCommand().alongWith(ODCommandFactory.stopIntakeCommand()));
-    DriverXButton.onTrue(new InstantCommand(() -> m_preRoller.setPreRollerPower(-1), m_preRoller));
-    DriverXButton.onFalse(new InstantCommand(() -> m_preRoller.setPreRollerPower(0), m_preRoller));
+    DriverXButton.onTrue(new InstantCommand(() -> m_robotDrive.toggleSlowMode()));
 
     DriverAButton.onTrue(new InstantCommand(() -> m_intake.setIntakePower(0.5), m_intake));
     DriverAButton.onFalse(new InstantCommand(() -> m_intake.setIntakePower(0), m_intake));
@@ -184,9 +185,10 @@ private void configureButtonBindings() {
     ), m_intake));
     DriverYButton.onFalse(new InstantCommand(() -> m_intake.setIntakePower(0), m_intake));
 
-    DriverLeftBumper.onTrue(new InstantCommand(() -> m_shooter.setShooterPower(-0.25), m_shooter));
-    DriverLeftBumper.onFalse(new InstantCommand(() -> m_shooter.setShooterPower(0), m_shooter));
+    DriverLeftBumper.onTrue(new InstantCommand(() -> m_shooter.setShooterPower(-0.25), m_shooter).alongWith(new InstantCommand(() -> m_preRoller.setPreRollerPower(-1), m_preRoller)));
+    DriverLeftBumper.onFalse(new InstantCommand(() -> m_shooter.setShooterPower(0), m_shooter).alongWith(new InstantCommand(() -> m_preRoller.setPreRollerPower(0), m_preRoller)));
     DriverDPadLeft.onTrue(new InstantCommand(()-> m_robotDrive.toggleYuMode()));
+
 
     /*
      * OPERATOR BUTTON MAPPING

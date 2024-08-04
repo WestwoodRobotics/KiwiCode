@@ -42,7 +42,7 @@ public class ODCommandFactory {
      * @return The command to sense the intake and set the intake power.
      */
     public Command intakeSenseCommand(){
-        return new preRollerSenseCommand(m_preRoller, 6180, 0.1, 20, 30).alongWith(new InstantCommand(()->m_intake.setIntakePower(0.8)));
+        return new preRollerSenseCommand(m_preRoller, 6180, 0.1, 10, 30).alongWith(new InstantCommand(()->m_intake.setIntakePower(0.8)));
     }
 
     /**

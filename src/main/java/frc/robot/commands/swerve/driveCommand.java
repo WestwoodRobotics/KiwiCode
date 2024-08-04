@@ -44,6 +44,7 @@ public class driveCommand extends Command {
    */
   @Override
   public void execute() {
+    slowMode = m_swerveDrive.getSlowMode();
     double leftX, leftY, rightX;
     isYuMode = m_swerveDrive.isYuMode();
     if (controller.getBackButtonPressed()) {
@@ -64,6 +65,7 @@ public class driveCommand extends Command {
       leftY *= Constants.DriveConstants.slowModeMultiplier;
       rightX *= Constants.DriveConstants.slowModeMultiplier;
     }
+
     m_swerveDrive.drive(leftY, leftX, rightX, true, false);
   }
 

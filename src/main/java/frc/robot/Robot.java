@@ -30,6 +30,7 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+    m_robotContainer.m_robotDrive.resetGyro();
   }
 
   /**
@@ -59,6 +60,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_robotContainer.ODCommandFactory.resetTimer();
+    m_robotContainer.m_robotDrive.resetGyro();
     m_robotContainer.m_shooter.removeDefaultCommand();
     m_robotContainer.ODCommandFactory.startTimer();
     //m_robotContainer.m_shooter.setDefaultCommand(new shooterPIDCommand(m_robotContainer.m_shooter, 1000));
