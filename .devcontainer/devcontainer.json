@@ -1,9 +1,8 @@
 {
 	"name": "WPILib",
-	"build": {
-		"dockerfile": "Dockerfile"
-	},
-
+	"image": "mcr.microsoft.com/vscode/devcontainers/base:ubuntu",
+	"remoteUser": "ubuntu",
+	"postCreateCommand": "./post_create.sh"
 	"overrideCommand": false,
 	"privileged": true,
 	"mounts": [

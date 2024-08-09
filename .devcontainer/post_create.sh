@@ -1,5 +1,7 @@
 #!/bin/sh
 
+apt-get update && apt-get install -y sudo && echo 'ubuntu ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+
 # Install wget
 apt-get update && apt-get install -y wget
 
