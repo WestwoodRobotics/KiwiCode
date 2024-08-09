@@ -1,15 +1,11 @@
 {
 	"name": "WPILib",
-	"build": {
-        "dockerfile": "./Dockerfile",
-        "context": "."
-    },
-	"postCreateCommand": "./post_create.sh",
+	"postCreateCommand": "sudo ./post_create.sh",
 	"overrideCommand": false,
 	"privileged": true,
 	"mounts": [
 	  {
-		"source": "vscode-dev",
+		"source": "vscode-desv",
 		"target": "/vscode-dev",
 		"type": "volume"
 	  }
@@ -44,6 +40,5 @@
 	},
 	"hostRequirements": {
 	  "memory": "9gb"
-	},
-	"remoteUser": "vscode"
+	}
 }
