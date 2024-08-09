@@ -28,3 +28,7 @@ The new codespace creation process uses the latest Ubuntu 22 distro, downloads a
 ## Dockerfile Note
 
 The Dockerfile now includes the installation of the `wget` package to ensure it is available for use during the container creation process.
+
+## Post-Create Script
+
+A new post-create script `post_create.sh` has been added to run the commands from the Dockerfile after the Codespace is fully built. This script ensures that the necessary setup steps are executed in the correct environment.

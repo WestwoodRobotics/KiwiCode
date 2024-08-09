@@ -31,5 +31,6 @@
 	},
 	"hostRequirements": {
 		"memory": "9gb"
-	}
+	},
+	"postCreateCommand": "./post_create.sh"
 }
