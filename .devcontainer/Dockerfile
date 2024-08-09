@@ -1,3 +1,4 @@
-FROM ubuntu:22.04
+ARG VARIANT="noble"
+FROM buildpack-deps:${VARIANT}-curl
 
-CMD ["tail", "-f", "/dev/null"]
+LABEL dev.containers.features="common"
