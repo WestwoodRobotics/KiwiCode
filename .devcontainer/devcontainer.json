@@ -2,7 +2,7 @@
 	"name": "WPILib",
 	"image": "mcr.microsoft.com/vscode/devcontainers/base:ubuntu",
 	"remoteUser": "ubuntu",
-	"postCreateCommand": "./post_create.sh"
+	"postCreateCommand": "./post_create.sh",
 	"overrideCommand": false,
 	"privileged": true,
 	"mounts": [
@@ -30,6 +30,5 @@
 	},
 	"hostRequirements": {
 		"memory": "9gb"
-	},
-	"postCreateCommand": "./post_create.sh"
+	}
 }
