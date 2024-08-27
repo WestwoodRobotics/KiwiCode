@@ -79,6 +79,11 @@ public class Shooter extends SubsystemBase {
         setBottomRollerPower(-power);
     }
 
+    public void setShooterPower(double upperPower, double lowerPower){
+        setTopRollerPower(-upperPower);
+        setBottomRollerPower(-lowerPower);
+    }
+
     /**
      * Gets the raw RPM of the top roller motor.
      * 

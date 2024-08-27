@@ -115,7 +115,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("SpinSensePreRoller", ODCommandFactory.intakeSenseCommand());
     NamedCommands.registerCommand("Intake", ODCommandFactory.intakeSenseCommand());
     NamedCommands.registerCommand("StopIntake", ODCommandFactory.stopIntakeSenseCommand());
-    NamedCommands.registerCommand("RevUpAndShoot", ODCommandFactory.revUpAndShootCommand(0.75, 4000));
+    NamedCommands.registerCommand("RevUpAndShoot", ODCommandFactory.revUpAndShootCommandAuton(0.90, 4000, 3000));
     NamedCommands.registerCommand("StopShooter", ODCommandFactory.stopShooterCommand());
     NamedCommands.registerCommand("releasePreRollerCommand", ODCommandFactory.fireNote());
     NamedCommands.registerCommand("stopAllCommand", ODCommandFactory.stopAllCommand());
@@ -175,9 +175,10 @@ private void configureButtonBindings() {
 
     // DriverBButton.onTrue(new InstantCommand(() -> m_preRoller.setPreRollerPower(1), m_preRoller));
     // DriverBButton.onFalse(new InstantCommand(() -> m_preRoller.setPreRollerPower(0), m_preRoller));
-    DriverBButton.onTrue(ODCommandFactory.intakeSenseCommand().alongWith(new InstantCommand(() -> m_robotDrive.toggleSlowMode())));
+    DriverBButton.onTrue(ODCommandFactory.intakeSenseCommand());
     DriverBButton.onFalse(ODCommandFactory.stopPreRollerCommand().alongWith(ODCommandFactory.stopIntakeCommand()));
-    DriverXButton.onTrue(new InstantCommand(() -> m_robotDrive.toggleSlowMode()));
+    DriverRightBumper.onTrue(new InstantCommand(() -> m_robotDrive.toggleSlowMode()));
+    DriverRightBumper.onFalse(new InstantCommand(() -> m_robotDrive.toggleSlowMode()));
 
     DriverAButton.onTrue(new InstantCommand(() -> m_intake.setIntakePower(0.5), m_intake));
     DriverAButton.onFalse(new InstantCommand(() -> m_intake.setIntakePower(0), m_intake));
@@ -185,7 +186,7 @@ private void configureButtonBindings() {
     ), m_intake));
     DriverYButton.onFalse(new InstantCommand(() -> m_intake.setIntakePower(0), m_intake));
 
-    DriverLeftBumper.onTrue(new InstantCommand(() -> m_shooter.setShooterPower(-0.25), m_shooter).alongWith(new InstantCommand(() -> m_preRoller.setPreRollerPower(-1), m_preRoller)));
+    DriverLeftBumper.onTrue(new InstantCommand(() -> m_shooter.setShooterPower(-0.15), m_shooter).alongWith(new InstantCommand(() -> m_preRoller.setPreRollerPower(-1), m_preRoller)));
     DriverLeftBumper.onFalse(new InstantCommand(() -> m_shooter.setShooterPower(0), m_shooter).alongWith(new InstantCommand(() -> m_preRoller.setPreRollerPower(0), m_preRoller)));
     DriverDPadLeft.onTrue(new InstantCommand(()-> m_robotDrive.toggleYuMode()));
 
@@ -195,7 +196,7 @@ private void configureButtonBindings() {
      */
   }
 
-//------------------------------------------- autonomous modes -------------------------------------------
+//------------------------------------------- autonom555555ous modes -------------------------------------------
     
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

@@ -65,7 +65,14 @@ public class ODCommandFactory {
         return new shooterPIDCommand(m_shooter, power, targetRPM)
         .andThen(new InstantCommand(() -> m_preRoller.setPreRollerPower(0.7)))
         .andThen(new WaitCommand(0.6))
-        .andThen(new InstantCommand(()-> m_shooter.setShooterPower(40)).alongWith(new InstantCommand(() -> m_preRoller.stopPreRoller())));
+        .andThen(new InstantCommand(()-> m_shooter.setShooterPower(1)).alongWith(new InstantCommand(() -> m_preRoller.stopPreRoller())));
+    }
+
+    public Command revUpAndShootCommandAuton(double power, double targetRPMUpper, double targetRPMLower){
+        return new shooterPIDCommand(m_shooter, power, power, targetRPMUpper, targetRPMLower)
+        .andThen(new InstantCommand(() -> m_preRoller.setPreRollerPower(0.7)))
+        .andThen(new WaitCommand(0.6))
+        .andThen(new InstantCommand(()-> m_shooter.setShooterPower(1)).alongWith(new InstantCommand(() -> m_preRoller.stopPreRoller())));
     }
 
     /**

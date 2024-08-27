@@ -1,5 +1,7 @@
 package frc.robot.commands.shooter;
 
+import java.sql.Driver;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -12,7 +14,13 @@ import frc.robot.subsystems.Shooter.Shooter;
 public class shooterPIDCommand extends Command{
     private Shooter m_shooter;
     private double targetRPM;
+
+    private double targetRPMUpper;
+    private double targetRPMLower;
     private double power;
+
+    private double upperPower;
+    private double lowerPower;
     private PIDController TopMotorPIDController;
     private PIDController BottomMotorPIDController;
 
@@ -26,10 +34,27 @@ public class shooterPIDCommand extends Command{
     public shooterPIDCommand(Shooter m_shooter, double power, double targetRPM){
         this.m_shooter = m_shooter;
         this.power = power;
+        this.targetRPMLower = 0;
+        this.targetRPMUpper = 0;
+        this.lowerPower = 0;
+        this.upperPower = 0;
+
         TopMotorPIDController = m_shooter.getTopRollerPIDController();
         BottomMotorPIDController = m_shooter.getBottomRollerPIDController();
         this.targetRPM = targetRPM;
         addRequirements(m_shooter);
+
+    }
+
+    public shooterPIDCommand(Shooter m_shooter, double upperPower, double lowerPower, double targetRPMUpper, double targetRPMLower){
+        this.m_shooter = m_shooter;
+        this.power = power;
+        TopMotorPIDController = m_shooter.getTopRollerPIDController();
+        BottomMotorPIDController = m_shooter.getBottomRollerPIDController();
+        this.targetRPMUpper = targetRPMUpper;
+        this.targetRPMLower = targetRPMLower;
+        addRequirements(m_shooter);
+
     }
 
     /**
@@ -37,7 +62,13 @@ public class shooterPIDCommand extends Command{
      */
     @Override
     public void initialize() {
-        m_shooter.setShooterPower(power);
+        if (upperPower == 0 || lowerPower == 0){
+            m_shooter.setShooterPower(power);
+        }
+        else{
+            m_shooter.setShooterPower(upperPower, lowerPower);
+        }
+
     }
 
     /**
@@ -65,10 +96,14 @@ public class shooterPIDCommand extends Command{
     @Override
     public boolean isFinished() {
         if (DriverStation.isAutonomous()){
-            return (this.m_shooter.getTopRollerMotorRawRPM() >= targetRPM);
+            if((lowerPower == 0) || (upperPower == 0)){
+                return (this.m_shooter.getTopRollerMotorRawRPM() >= targetRPM);
+            }
+            else{
+                return (this.m_shooter.getTopRollerMotorRawRPM() >= targetRPMUpper) && (this.m_shooter.getBottomRollerMotorRawRPM() >= targetRPMLower);
+            }
         }
         return false;
-        
     }
     
     
