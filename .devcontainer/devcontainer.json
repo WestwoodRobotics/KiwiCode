@@ -1,5 +1,7 @@
 {
 	"name": "WPILib",
+	"image": "mcr.microsoft.com/vscode/devcontainers/base:ubuntu",
+	"remoteUser": "ubuntu",
 	"postCreateCommand": "./post_create.sh",
 	"overrideCommand": false,
 	"privileged": true,
@@ -20,7 +22,6 @@
 		  "dbaeumer.vscode-eslint",
 		  "EditorConfig.EditorConfig",
 		  "GitHub.vscode-pull-request-github",
-		  "ms-vscode.vscode-github-issue-notebooks",
 		  "ms-vscode.vscode-selfhost-test-provider",
 		  "mutantdino.resourcemonitor"
 		]
