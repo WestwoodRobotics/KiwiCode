@@ -1,8 +1,3 @@
-
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -25,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.PortConstants;
 import frc.robot.commands.ODCommandFactory;
+import frc.robot.commands.ampPoseCommand;
 import frc.robot.commands.preRoller.preRollerSenseCommand;
 import frc.robot.commands.shooter.shooterPIDCommand;
 import frc.robot.commands.swerve.driveCommand;
@@ -32,8 +28,7 @@ import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.preRoller;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.swerve.SwerveDrive;
-
-
+import frc.robot.subsystems.AmpSubsystem;
 
 
 /*
@@ -49,6 +44,7 @@ public class RobotContainer {
   private final preRoller m_preRoller = new preRoller();
   protected final Shooter m_shooter = new Shooter(false);
   private final SendableChooser<Command> autoChooser;
+  private final AmpSubsystem m_ampSubsystem = new AmpSubsystem(Constants.AmpConstants.ampMotorId); // Initialize AmpSubsystem
 
 
   // LED for indicating robot state, not implemented in hardware.
@@ -194,6 +190,10 @@ private void configureButtonBindings() {
     /*
      * OPERATOR BUTTON MAPPING
      */
+    OperatorYButton.onTrue(new ampPoseCommand(m_ampSubsystem, Constants.AmpConstants.ampOutEncoderValue));
+    OperatorAButton.onTrue(new ampPoseCommand(m_ampSubsystem, Constants.AmpConstants.ampHomeEncoderValue));
+    OperatorDPadUp.onTrue(new InstantCommand(() -> m_ampSubsystem.setPower(0.5), m_ampSubsystem));
+    OperatorDPadDown.onTrue(new InstantCommand(() -> m_ampSubsystem.setPower(-0.5), m_ampSubsystem));
   }
 
 //------------------------------------------- autonom555555ous modes -------------------------------------------
