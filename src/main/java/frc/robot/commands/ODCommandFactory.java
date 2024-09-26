@@ -1,10 +1,13 @@
 package frc.robot.commands;
 
+import java.nio.file.WatchEvent;
+
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.intake.intakePIDCommand;
 import frc.robot.commands.preRoller.preRollerSenseCommand;
@@ -66,6 +69,11 @@ public class ODCommandFactory {
         .andThen(new InstantCommand(() -> m_preRoller.setPreRollerPower(0.7)))
         .andThen(new WaitCommand(0.6))
         .andThen(new InstantCommand(()-> m_shooter.setShooterPower(1)).alongWith(new InstantCommand(() -> m_preRoller.stopPreRoller())));
+    }
+
+    public Command powerWaitSecShoot(){
+        return new InstantCommand(() -> m_shooter.setTopRollerPower(-0.07)).alongWith(new InstantCommand(() -> m_shooter.setBottomRollerPower(-0.22)))
+            .andThen(new WaitCommand(1)).andThen(new InstantCommand(() -> m_preRoller.setPreRollerPower(0.4))).andThen(new WaitCommand(1)).andThen(new InstantCommand(() -> m_shooter.stopShooter())).alongWith(new InstantCommand(() -> m_preRoller.stopPreRoller()));
     }
 
     public Command revUpAndShootCommandAuton(double power, double targetRPMUpper, double targetRPMLower){

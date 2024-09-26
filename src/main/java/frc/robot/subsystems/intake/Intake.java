@@ -6,6 +6,7 @@ import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.UtilityConstants;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
@@ -15,7 +16,8 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
  * stop the motor, and get the motor's RPM.
  */
 public class Intake extends SubsystemBase {
-    private CANSparkBase intakeMotor;
+    private CANSparkBase intakeMotor1;
+    private CANSparkBase intakeMotor2;
     private PIDController PIDController;
 
     /**
@@ -23,7 +25,10 @@ public class Intake extends SubsystemBase {
      * Initializes the intake motor and PID controller.
      */
     public Intake() {
-        intakeMotor = new CANSparkMax(IntakeConstants.kIntakeMotorPort, MotorType.kBrushless); 
+        intakeMotor1 = new CANSparkMax(IntakeConstants.kIntakeMotorPort1, MotorType.kBrushless); 
+        intakeMotor2 = new CANSparkMax(IntakeConstants.kIntakeMotorPort2, MotorType.kBrushless);
+        intakeMotor1.setIdleMode(IdleMode.kCoast);
+        intakeMotor2.setIdleMode(IdleMode.kCoast);
         this.PIDController = new PIDController(IntakeConstants.kP, 
                                                IntakeConstants.kI, 
                                                IntakeConstants.kD);
@@ -35,14 +40,16 @@ public class Intake extends SubsystemBase {
      * @param power The power to set for the intake motor.
      */
     public void setIntakePower(double power) {
-        intakeMotor.set(power);
+        intakeMotor1.set(-power);
+        intakeMotor2.set(power);
     }
 
     /**
      * Stops the intake motor.
      */
     public void stopIntake(){
-        intakeMotor.set(0);
+        intakeMotor1.set(0);
+        intakeMotor2.set(0);
     }
 
     /**
@@ -51,7 +58,7 @@ public class Intake extends SubsystemBase {
      * @return The raw RPM of the intake motor.
      */
     public double getRawMotorRPM(){
-        return intakeMotor.getEncoder().getVelocity();
+        return intakeMotor1.getEncoder().getVelocity();
     }
 
     /**
@@ -80,7 +87,7 @@ public class Intake extends SubsystemBase {
     public void periodic() {
         if (UtilityConstants.debugMode){
             SmartDashboard.putNumber("Intake RPM", getRPM());
-            SmartDashboard.putNumber("Intake Current", intakeMotor.getOutputCurrent());
+            SmartDashboard.putNumber("Intake Current", intakeMotor1.getOutputCurrent());
         }
     }
 

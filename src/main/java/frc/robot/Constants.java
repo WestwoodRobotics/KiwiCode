@@ -181,7 +181,9 @@ public final class Constants {
     public static final double kFreeSpeedRpm = 6784;
   }
   public static final class IntakeConstants {
-    public static final int kIntakeMotorPort = 30; //TODO: Change this value
+    public static final int kIntakeMotorPort1 = 30; //TODO: Change this value
+    public static final int kIntakeMotorPort2 = 42;
+
     public static final double kRPMConversionFactor = 1.0;
 
 
@@ -217,11 +219,11 @@ public final class Constants {
   }
   
   public static final class AmpConstants {
-    public static final double ampHomeEncoderValue = 0.0;
-    public static final double ampOutEncoderValue = 1.0;
-    public static final double kP = 0.1;
+    public static final double ampHomeEncoderValue = -0.05;
+    public static final double ampOutEncoderValue = -0.40491;
+    public static final double kP = 0.5;
     public static final double kI = 0.0;
-    public static final double kD = 0.0;
-    public static final int ampMotorId = 1; // P0d6d
+    public static final double kD = 0.04;
+    public static final int ampMotorId = 40; // P0d6d
   }
 }

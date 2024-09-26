@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.intake.Intake;
 
 /**
- * The intakePIDCommand class is responsible for controlling the intake subsystem using a PID controller.
+ * The intakePIDCommand class is responsible for controlling the intake subsystem wusing a PID controller.
  * It sets the intake motor power based on the target RPM and the current RPM of the motor.
  */
 public class intakePIDCommand extends Command{

@@ -18,8 +18,10 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.AmpConstants;
 import frc.robot.Constants.PortConstants;
 import frc.robot.commands.ODCommandFactory;
+import frc.robot.commands.ampFreezeCommand;
 import frc.robot.commands.ampPoseCommand;
 import frc.robot.commands.preRoller.preRollerSenseCommand;
 import frc.robot.commands.shooter.shooterPIDCommand;
@@ -44,7 +46,7 @@ public class RobotContainer {
   private final preRoller m_preRoller = new preRoller();
   protected final Shooter m_shooter = new Shooter(false);
   private final SendableChooser<Command> autoChooser;
-  private final AmpSubsystem m_ampSubsystem = new AmpSubsystem(Constants.AmpConstants.ampMotorId); // Initialize AmpSubsystem
+  private final AmpSubsystem m_ampSubsystem = new AmpSubsystem(AmpConstants.ampMotorId); // Initialize AmpSubsystem
 
 
   // LED for indicating robot state, not implemented in hardware.
@@ -70,6 +72,7 @@ public class RobotContainer {
       XboxController.Button.kRightBumper.value);
   private final JoystickButton DriverLeftBumper = new JoystickButton(m_driverController,
       XboxController.Button.kLeftBumper.value);
+  private final JoystickButton driverLeftJoystickButton = new JoystickButton(m_driverController, XboxController.Button.kLeftStick.value);
       
   private final Trigger driverLeftTrigger = new Trigger(() -> m_driverController.getLeftTriggerAxis() > 0.5);
   private final Trigger driverRightTrigger = new Trigger(() -> m_driverController.getRightTriggerAxis() > 0.5);
@@ -173,8 +176,8 @@ private void configureButtonBindings() {
     // DriverBButton.onFalse(new InstantCommand(() -> m_preRoller.setPreRollerPower(0), m_preRoller));
     DriverBButton.onTrue(ODCommandFactory.intakeSenseCommand());
     DriverBButton.onFalse(ODCommandFactory.stopPreRollerCommand().alongWith(ODCommandFactory.stopIntakeCommand()));
-    DriverRightBumper.onTrue(new InstantCommand(() -> m_robotDrive.toggleSlowMode()));
-    DriverRightBumper.onFalse(new InstantCommand(() -> m_robotDrive.toggleSlowMode()));
+    driverLeftJoystickButton.onTrue(new InstantCommand(() -> m_robotDrive.toggleSlowMode()));
+    driverLeftJoystickButton.onFalse(new InstantCommand(() -> m_robotDrive.toggleSlowMode()));
 
     DriverAButton.onTrue(new InstantCommand(() -> m_intake.setIntakePower(0.5), m_intake));
     DriverAButton.onFalse(new InstantCommand(() -> m_intake.setIntakePower(0), m_intake));
@@ -185,15 +188,16 @@ private void configureButtonBindings() {
     DriverLeftBumper.onTrue(new InstantCommand(() -> m_shooter.setShooterPower(-0.15), m_shooter).alongWith(new InstantCommand(() -> m_preRoller.setPreRollerPower(-1), m_preRoller)));
     DriverLeftBumper.onFalse(new InstantCommand(() -> m_shooter.setShooterPower(0), m_shooter).alongWith(new InstantCommand(() -> m_preRoller.setPreRollerPower(0), m_preRoller)));
     DriverDPadLeft.onTrue(new InstantCommand(()-> m_robotDrive.toggleYuMode()));
-
+    DriverRightBumper.onTrue(new ampPoseCommand(m_ampSubsystem, Constants.AmpConstants.ampOutEncoderValue).andThen(new ampFreezeCommand(m_ampSubsystem)).alongWith(ODCommandFactory.powerWaitSecShoot()).andThen(new WaitCommand(1)).andThen(new ampPoseCommand(m_ampSubsystem, AmpConstants.ampHomeEncoderValue)).andThen(new ampFreezeCommand(m_ampSubsystem)));
 
     /*
      * OPERATOR BUTTON MAPPING
      */
     OperatorYButton.onTrue(new ampPoseCommand(m_ampSubsystem, Constants.AmpConstants.ampOutEncoderValue));
     OperatorAButton.onTrue(new ampPoseCommand(m_ampSubsystem, Constants.AmpConstants.ampHomeEncoderValue));
-    OperatorDPadUp.onTrue(new InstantCommand(() -> m_ampSubsystem.setPower(0.5), m_ampSubsystem));
-    OperatorDPadDown.onTrue(new InstantCommand(() -> m_ampSubsystem.setPower(-0.5), m_ampSubsystem));
+    OperatorDPadUp.onTrue(new ampPoseCommand(m_ampSubsystem, Constants.AmpConstants.ampHomeEncoderValue).alongWith(new InstantCommand(() -> m_shooter.stopShooter())).alongWith(new InstantCommand(() -> m_preRoller.stopPreRoller())));
+    
+
   }
 
 //------------------------------------------- autonom555555ous modes -------------------------------------------

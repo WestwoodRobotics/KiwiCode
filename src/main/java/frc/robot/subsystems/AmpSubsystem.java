@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.AmpConstants;
 
@@ -13,7 +14,7 @@ public class AmpSubsystem extends SubsystemBase {
     public AmpSubsystem(int motorPort) {
         AmpMotor = new CANSparkMax(motorPort, MotorType.kBrushless);
         ampPIDController = new PIDController(AmpConstants.kP, AmpConstants.kI, AmpConstants.kD);
-        ampPIDController.setTolerance(0.2);
+        ampPIDController.setTolerance(0.002);
     }
 
     public void setPower(double power) {
@@ -38,5 +39,10 @@ public class AmpSubsystem extends SubsystemBase {
 
     public double getCalculatedPIDPower() {
         return ampPIDController.calculate(getAmpEncoderPose());
+    }
+
+    @Override
+    public void periodic() {
+        SmartDashboard.putNumber("Amp Encoder Position: ", getAmpEncoderPose());
     }
 }
