@@ -72,7 +72,7 @@ public class driveCommand extends Command {
       rightX *= Constants.DriveConstants.slowModeMultiplier;
     }
 
-    if (Math.abs(rightX) < ControllerConstants.kDriveDeadband) {
+    if (Math.abs(rightX)) {
       rightX = rotationPIDController.calculate(m_swerveDrive.getHeading());
     } else {
       targetHeading = m_swerveDrive.getHeading();
