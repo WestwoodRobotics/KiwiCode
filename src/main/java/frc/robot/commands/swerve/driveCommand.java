@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.subsystems.swerve.SwerveDrive;
+import edu.wpi.first.math.controller.PIDController;
 
 /**
  * The driveCommand class is responsible for controlling the swerve drive subsystem using an Xbox controller.
@@ -17,6 +18,8 @@ public class driveCommand extends Command {
   private XboxController controller;
   private boolean slowMode;
   private boolean isYuMode;
+  private PIDController rotationPIDController;
+  private double targetHeading;
 
   /**
    * Constructs a new driveCommand.
@@ -36,6 +39,9 @@ public class driveCommand extends Command {
   @Override
   public void initialize() {
     slowMode = false;
+    rotationPIDController = new PIDController(Constants.DriveConstants.kP, Constants.DriveConstants.kI, Constants.DriveConstants.kD);
+    targetHeading = m_swerveDrive.getHeading();
+    rotationPIDController.setSetpoint(targetHeading);
   }
 
   /**
@@ -64,6 +70,13 @@ public class driveCommand extends Command {
       leftX *= Constants.DriveConstants.slowModeMultiplier;
       leftY *= Constants.DriveConstants.slowModeMultiplier;
       rightX *= Constants.DriveConstants.slowModeMultiplier;
+    }
+
+    if (Math.abs(rightX) < ControllerConstants.kDriveDeadband) {
+      rightX = rotationPIDController.calculate(m_swerveDrive.getHeading());
+    } else {
+      targetHeading = m_swerveDrive.getHeading();
+      rotationPIDController.setSetpoint(targetHeading);
     }
 
     m_swerveDrive.drive(leftY, leftX, rightX, true, false);
