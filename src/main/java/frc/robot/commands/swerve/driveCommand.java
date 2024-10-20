@@ -20,7 +20,7 @@ public class driveCommand extends Command {
   private boolean isYuMode;
   private PIDController rotationPIDController;
   private double targetHeading;
-  private boolean isRotInput
+  private boolean isRotInput;
 
   /**
    * Constructs a new driveCommand.
