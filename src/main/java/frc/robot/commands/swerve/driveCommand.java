@@ -20,6 +20,7 @@ public class driveCommand extends Command {
   private boolean isYuMode;
   private PIDController rotationPIDController;
   private double targetHeading;
+  private boolean isRotInput
 
   /**
    * Constructs a new driveCommand.
@@ -39,6 +40,7 @@ public class driveCommand extends Command {
   @Override
   public void initialize() {
     slowMode = false;
+    isRotInput = false;
     rotationPIDController = new PIDController(Constants.DriveConstants.kP, Constants.DriveConstants.kI, Constants.DriveConstants.kD);
     targetHeading = m_swerveDrive.getHeading();
     rotationPIDController.setSetpoint(targetHeading);
@@ -72,13 +74,17 @@ public class driveCommand extends Command {
       rightX *= Constants.DriveConstants.slowModeMultiplier;
     }
 
-    if (Math.abs(rightX)) {
+    if (Math.abs(rightX) > 0) {
+      isRotInput = false;
+    } 
+    else {
+      if (isRotInput == false){
+        targetHeading = m_swerveDrive.getHeading();
+        rotationPIDController.setSetpoint(targetHeading);
+        isRotInput = true;
+      }
       rightX = rotationPIDController.calculate(m_swerveDrive.getHeading());
-    } else {
-      targetHeading = m_swerveDrive.getHeading();
-      rotationPIDController.setSetpoint(targetHeading);
     }
-
     m_swerveDrive.drive(leftY, leftX, rightX, true, false);
   }
 
