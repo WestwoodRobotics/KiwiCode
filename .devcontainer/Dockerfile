@@ -3,8 +3,8 @@ FROM mcr.microsoft.com/devcontainers/base:ubuntu-24.04
 # Mount for docker-in-docker 
 VOLUME [ "/var/lib/docker" ]
 
-# Install wget package
-RUN apt-get update && apt-get install -y wget
+# Install openjdk-21-jre, xfce4, and xrdp packages
+RUN apt-get update && apt-get install -y openjdk-21-jre xfce4 xrdp
 
 # Copy the post_create.sh script to the container
 COPY post_create.sh /usr/local/bin/post_create.sh
