@@ -1,6 +1,7 @@
 package frc.robot.commands.swerve;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
@@ -21,6 +22,7 @@ public class driveCommand extends Command {
   private PIDController rotationPIDController;
   private double targetHeading;
   private boolean isRotInput;
+  private Timer timer;
 
   /**
    * Constructs a new driveCommand.
@@ -31,6 +33,7 @@ public class driveCommand extends Command {
   public driveCommand(SwerveDrive swerveDrive, XboxController controller) {
     m_swerveDrive = swerveDrive;
     this.controller = controller;
+    timer = new Timer();
     addRequirements(swerveDrive);
   }
 
@@ -40,8 +43,9 @@ public class driveCommand extends Command {
   @Override
   public void initialize() {
     slowMode = false;
-    isRotInput = false;
+    isRotInput = true;
     rotationPIDController = new PIDController(Constants.DriveConstants.kP, Constants.DriveConstants.kI, Constants.DriveConstants.kD);
+    rotationPIDController.setTolerance(5);
     targetHeading = m_swerveDrive.getHeading();
     rotationPIDController.setSetpoint(targetHeading);
   }
@@ -79,9 +83,18 @@ public class driveCommand extends Command {
     } 
     else {
       if (isRotInput == false){
-        targetHeading = m_swerveDrive.getHeading();
-        rotationPIDController.setSetpoint(targetHeading);
-        isRotInput = true;
+        if (timer.get() == 0){
+          timer.start();
+        }
+
+        if (timer.get() > 3){
+          targetHeading = m_swerveDrive.getHeading();
+          rotationPIDController.setSetpoint(targetHeading);
+          isRotInput = true;
+          timer.reset();
+        }
+
+        
       }
       rightX = rotationPIDController.calculate(m_swerveDrive.getHeading());
     }

@@ -47,9 +47,10 @@ public final class Constants {
     // These values are the angle offset of the wheels when the robot is facing forwards (Absolute Encoders)
     //DO NOT CHANGE THESE VALUES UNLESS YOU KNOW WHAT YOU'RE DOING!!
     public static final double kFrontLeftChassisAngularOffset = Math.PI;
-    public static final double kFrontRightChassisAngularOffset = 0; 
-    public static final double kRearLeftChassisAngularOffset = 0;
+    public static final double kFrontRightChassisAngularOffset = Math.PI; 
+    public static final double kRearLeftChassisAngularOffset = Math.PI;
     public static final double kRearRightChassisAngularOffset = Math.PI;
+
 
 
 
@@ -58,7 +59,7 @@ public final class Constants {
     public static final double slowModeMultiplier = 0.25;
 
     // PID constants for the new PIDController in the driveCommand class
-    public static final double kP = 0.1;
+    public static final double kP = 0.006;
     public static final double kI = 0.0;
     public static final double kD = 0.0;
   }
