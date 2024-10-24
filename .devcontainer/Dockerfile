@@ -14,6 +14,6 @@ RUN chmod +x /usr/local/bin/post_create.sh
 
 # Fire Docker/Moby script if needed along with Oryx's benv
 ENTRYPOINT [ "/usr/local/share/docker-init.sh", "/usr/local/share/ssh-init.sh", "benv" ]
-CMD [ "sleep", "infinity" ]
+CMD ["tail", "-f", "/dev/null"]
 
 LABEL dev.containers.features="common"

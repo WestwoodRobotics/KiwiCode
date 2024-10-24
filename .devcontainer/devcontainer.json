@@ -3,7 +3,7 @@
 	"remoteUser": "vscode",
 	"image": "mcr.microsoft.com/devcontainers/base:ubuntu-22.04",
 	"postCreateCommand": "bash /usr/local/bin/post_create.sh",
-	"overrideCommand": false,
+	"overrideCommand": true,
 	"privileged": true,
 	"features": {
 		"ghcr.io/devcontainers/features/desktop-lite:1": {
