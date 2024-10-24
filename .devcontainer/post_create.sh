@@ -16,7 +16,6 @@ if [ ! -d "$HOME/wpilib/${VERSION%%.*}" ]; then
     echo "Running WPILibInstaller..."
     cd WPILib_Linux-$VERSION
     sudo chmod +x WPILibInstaller
-    sudo ./WPILibInstaller
 else
     echo "WPILib is already set up"
 fi
