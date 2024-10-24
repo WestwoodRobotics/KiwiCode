@@ -39,7 +39,10 @@ if [ ! -d "$HOME/wpilib/${VERSION%%.*}" ]; then
     sudo mv ${VERSION%%.*} ~/wpilib
     sudo rm -rf WPILib_Linux-*
     # Run ToolsUpdater.py
-    sudo cd ~/wpilib/$YEAR/tools/ && sudo python3 ToolsUpdater.py
+    cd ~/wpilib/$YEAR/tools/ && sudo python3 ToolsUpdater.py
 
     # Install VS Code extensions
-    sudo cd ~/wpilib/$YEAR/vsCodeExtensions && sudo find . -name "*.vsix" | sudo xargs -I {} code --install-extension {}
+    cd ~/wpilib/$YEAR/vsCodeExtensions && sudo find . -name "*.vsix" | sudo xargs -I {} code --install-extension {}
+else
+    echo "WPILib is already set up"
+fi
