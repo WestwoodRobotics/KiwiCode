@@ -80,24 +80,24 @@ public class driveCommand extends Command {
 
     if (Math.abs(rightX) > 0) {
       isRotInput = false;
-    } 
-    else {
-      if (isRotInput == false){
-        if (timer.get() == 0){
-          timer.start();
-        }
-
-        if (timer.get() > 3){
+      timer.reset();
+      timer.stop();
+    } else {
+      if (!isRotInput) {
+        timer.start();
+        if (timer.hasElapsed(1.5)) {
           targetHeading = m_swerveDrive.getHeading();
           rotationPIDController.setSetpoint(targetHeading);
           isRotInput = true;
           timer.reset();
+          timer.stop();
         }
-
-        
       }
-      rightX = rotationPIDController.calculate(m_swerveDrive.getHeading());
+      if (isRotInput) {
+        rightX = rotationPIDController.calculate(m_swerveDrive.getHeading());
+      }
     }
+
     m_swerveDrive.drive(leftY, leftX, rightX, true, false);
   }
 
