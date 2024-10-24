@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot;
 
 
@@ -51,15 +47,21 @@ public final class Constants {
     // These values are the angle offset of the wheels when the robot is facing forwards (Absolute Encoders)
     //DO NOT CHANGE THESE VALUES UNLESS YOU KNOW WHAT YOU'RE DOING!!
     public static final double kFrontLeftChassisAngularOffset = Math.PI;
-    public static final double kFrontRightChassisAngularOffset = 0; 
-    public static final double kRearLeftChassisAngularOffset = 0;
+    public static final double kFrontRightChassisAngularOffset = Math.PI; 
+    public static final double kRearLeftChassisAngularOffset = Math.PI;
     public static final double kRearRightChassisAngularOffset = Math.PI;
+
 
 
 
     public static final boolean kGyroReversed = false;
 
     public static final double slowModeMultiplier = 0.25;
+
+    // PID constants for the new PIDController in the driveCommand class
+    public static final double kP = 0.006;
+    public static final double kI = 0.0;
+    public static final double kD = 0.0;
   }
 
   public static final class PortConstants{

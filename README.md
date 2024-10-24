@@ -23,12 +23,12 @@ These values can be adjusted in the `Constants.java` file.
 
 ## Codespace Creation Process
 
-The new codespace creation process uses the latest Ubuntu 22 distro, downloads and extracts the specified file, and replaces year and version references dynamically.
+The new codespace creation process uses the latest Ubuntu version, downloads and extracts the specified file, and replaces year and version references dynamically. It also sets up a desktop environment accessible from the browser using `xfce4` and `xrdp`.
 
 ## Dockerfile Note
 
-The Dockerfile now includes the installation of the `wget` package to ensure it is available for use during the container creation process.
+The Dockerfile now includes the installation of the `xfce4` and `xrdp` packages to ensure a desktop environment is available for use during the container creation process.
 
 ## Post-Create Script
 
-A new post-create script `post_create.sh` has been added to run the commands from the Dockerfile after the Codespace is fully built. This script ensures that the necessary setup steps are executed in the correct environment.
+A new post-create script `post_create.sh` has been added to run the commands from the Dockerfile after the Codespace is fully built. This script ensures that the necessary setup steps are executed in the correct environment, including downloading and running the WPILibInstaller directly after extracting it.

@@ -1,44 +1,15 @@
 {
-	"name": "WPILib",
-	"remoteUser": "vscode",
-	"postCreateCommand": "./post_create.sh",
-	"overrideCommand": false,
-	"privileged": true,
-	"mounts": [
-	  {
-		"source": "vscode-desv",
-		"target": "/vscode-dev",
-		"type": "volume"
-	  }
-	],
-	"customizations": {
-	  "vscode": {
-		"settings": {
-		  "resmon.show.battery": false,
-		  "resmon.show.cpufreq": false
-		},
-		"extensions": [
-		  "dbaeumer.vscode-eslint",
-		  "EditorConfig.EditorConfig",
-		  "GitHub.vscode-pull-request-github",
-		  "ms-vscode.vscode-selfhost-test-provider",
-		  "mutantdino.resourcemonitor"
-		]
-	  }
-	},
-	"features": {
-		"ghcr.io/devcontainers/features/common-utils:2": {
-			"version": "latest",
-			"installZsh": "true",
-            "username": "vscode",
-            "upgradePackages": "true"
-		},
-		"ghcr.io/devcontainers/features/git:1": {
-            "version": "latest",
-            "ppa": "false"
+    "name": "WPILib",
+    "remoteUser": "vscode",
+    "image": "mcr.microsoft.com/devcontainers/base:ubuntu-22.04",
+    "postCreateCommand": "/workspaces/KiwiCode/.devcontainer/post_create.sh",
+    "overrideCommand": true,
+    "privileged": true,
+    "features": {
+        "ghcr.io/devcontainers/features/desktop-lite:1": {
+            "version": "latest"
         }
-	},
-	"hostRequirements": {
-	  "memory": "9gb"
-	}
+    },
+    "forwardPorts": [6081],
+    "extensions": ["GitHub.copilot"]
 }
