@@ -11,6 +11,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
@@ -192,13 +193,37 @@ public class SwerveDrive extends SubsystemBase {
             ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedCommanded, ySpeedCommanded, rotCommanded, Rotation2d.fromDegrees(gyroSubsystem.getRawGyroObject().getZAngle()))
             : new ChassisSpeeds(xSpeedCommanded, ySpeedCommanded, rotCommanded));
 
+    // Calculate current drive vector
+    SwerveModuleState[] currentStates = getModuleStates();
+    Translation2d currentDriveVector = new Translation2d(
+        currentStates[0].speedMetersPerSecond * Math.cos(currentStates[0].angle.getRadians()),
+        currentStates[0].speedMetersPerSecond * Math.sin(currentStates[0].angle.getRadians())
+    );
+
+    // Calculate desired drive vector
+    Translation2d desiredDriveVector = new Translation2d(xSpeedCommanded, ySpeedCommanded);
+
+    // Project current drive vector onto desired drive vector
+    double dotProduct = currentDriveVector.getX() * desiredDriveVector.getX() + currentDriveVector.getY() * desiredDriveVector.getY();
+    double desiredMagnitude = desiredDriveVector.getNorm();
+    double projectedMagnitude = dotProduct / desiredMagnitude;
+
+    // Adjust drive motor power based on projected component
+    double adjustedXSpeedCommanded = projectedMagnitude * (desiredDriveVector.getX() / desiredMagnitude);
+    double adjustedYSpeedCommanded = projectedMagnitude * (desiredDriveVector.getY() / desiredMagnitude);
+
+    SwerveModuleState[] adjustedSwerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
+        fieldRelative
+            ? ChassisSpeeds.fromFieldRelativeSpeeds(adjustedXSpeedCommanded, adjustedYSpeedCommanded, rotCommanded, Rotation2d.fromDegrees(gyroSubsystem.getRawGyroObject().getZAngle()))
+            : new ChassisSpeeds(adjustedXSpeedCommanded, adjustedYSpeedCommanded, rotCommanded));
+
     SwerveDriveKinematics.desaturateWheelSpeeds(
-        swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
-    frontLeftSwerveModule.setDesiredState(swerveModuleStates[0]);
-    frontRightSwerveModule.setDesiredState(swerveModuleStates[1]);
-    rearLeftSwerveModule.setDesiredState(swerveModuleStates[2]);
-    rearRightSwerveModule.setDesiredState(swerveModuleStates[3]);
-SmartDashboard.putNumber("module velocity ref", swerveModuleStates[1].speedMetersPerSecond);
+        adjustedSwerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
+    frontLeftSwerveModule.setDesiredState(adjustedSwerveModuleStates[0]);
+    frontRightSwerveModule.setDesiredState(adjustedSwerveModuleStates[1]);
+    rearLeftSwerveModule.setDesiredState(adjustedSwerveModuleStates[2]);
+    rearRightSwerveModule.setDesiredState(adjustedSwerveModuleStates[3]);
+    SmartDashboard.putNumber("module velocity ref", adjustedSwerveModuleStates[1].speedMetersPerSecond);
   }
 
   /**
@@ -345,5 +370,19 @@ SmartDashboard.putNumber("module velocity ref", swerveModuleStates[1].speedMeter
   }
   public void toggleSlowMode(){
     isSlowMode = !(isSlowMode);
+  }
+
+  /**
+   * Gets the current states of all swerve modules.
+   * 
+   * @return An array of SwerveModuleState objects representing the current states of the swerve modules.
+   */
+  public SwerveModuleState[] getModuleStates() {
+    return new SwerveModuleState[] {
+        frontLeftSwerveModule.getState(),
+        frontRightSwerveModule.getState(),
+        rearLeftSwerveModule.getState(),
+        rearRightSwerveModule.getState()
+    };
   }
 }

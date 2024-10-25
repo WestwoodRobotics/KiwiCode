@@ -9,6 +9,7 @@ import com.revrobotics.SparkAbsoluteEncoder.Type;
 import com.revrobotics.SparkPIDController;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -160,5 +161,56 @@ public class SwerveModule {
   
   public double getTurningEncoderPosition() {
     return turningMotorEncoder.getPosition();
+  }
+
+  /**
+   * Calculates the current drive vector using the getState() method.
+   *
+   * @return The current drive vector as a Translation2d object.
+   */
+  public Translation2d calculateCurrentDriveVector() {
+    SwerveModuleState currentState = getState();
+    return new Translation2d(
+        currentState.speedMetersPerSecond * Math.cos(currentState.angle.getRadians()),
+        currentState.speedMetersPerSecond * Math.sin(currentState.angle.getRadians())
+    );
+  }
+
+  /**
+   * Calculates the desired drive vector using joystick inputs.
+   *
+   * @param leftY The Y-axis input from the joystick.
+   * @param leftX The X-axis input from the joystick.
+   * @return The desired drive vector as a Translation2d object.
+   */
+  public Translation2d calculateDesiredDriveVector(double leftY, double leftX) {
+    return new Translation2d(leftY, leftX);
+  }
+
+  /**
+   * Projects the current drive vector onto the desired drive vector using the dot product.
+   *
+   * @param currentDriveVector The current drive vector.
+   * @param desiredDriveVector The desired drive vector.
+   * @return The projected magnitude of the current drive vector onto the desired drive vector.
+   */
+  public double projectCurrentDriveVectorOntoDesired(Translation2d currentDriveVector, Translation2d desiredDriveVector) {
+    double dotProduct = currentDriveVector.getX() * desiredDriveVector.getX() + currentDriveVector.getY() * desiredDriveVector.getY();
+    double desiredMagnitude = desiredDriveVector.getNorm();
+    return dotProduct / desiredMagnitude;
+  }
+
+  /**
+   * Adjusts the drive motor power based on the projected component.
+   *
+   * @param projectedMagnitude The projected magnitude of the current drive vector onto the desired drive vector.
+   * @param desiredDriveVector The desired drive vector.
+   * @return An array containing the adjusted drive motor power for the Y and X axes.
+   */
+  public double[] adjustDriveMotorPower(double projectedMagnitude, Translation2d desiredDriveVector) {
+    double desiredMagnitude = desiredDriveVector.getNorm();
+    double adjustedLeftY = projectedMagnitude * (desiredDriveVector.getX() / desiredMagnitude);
+    double adjustedLeftX = projectedMagnitude * (desiredDriveVector.getY() / desiredMagnitude);
+    return new double[]{adjustedLeftY, adjustedLeftX};
   }
 }

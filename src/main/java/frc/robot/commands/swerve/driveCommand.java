@@ -8,6 +8,8 @@ import frc.robot.Constants;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.subsystems.swerve.SwerveDrive;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 
 /**
  * The driveCommand class is responsible for controlling the swerve drive subsystem using an Xbox controller.
@@ -98,7 +100,26 @@ public class driveCommand extends Command {
       }
     }
 
-    m_swerveDrive.drive(leftY, leftX, rightX, true, false);
+    // Calculate current drive vector
+    SwerveModuleState[] currentStates = m_swerveDrive.getModuleStates();
+    Translation2d currentDriveVector = new Translation2d(
+        currentStates[0].speedMetersPerSecond * Math.cos(currentStates[0].angle.getRadians()),
+        currentStates[0].speedMetersPerSecond * Math.sin(currentStates[0].angle.getRadians())
+    );
+
+    // Calculate desired drive vector
+    Translation2d desiredDriveVector = new Translation2d(leftY, leftX);
+
+    // Project current drive vector onto desired drive vector
+    double dotProduct = currentDriveVector.getX() * desiredDriveVector.getX() + currentDriveVector.getY() * desiredDriveVector.getY();
+    double desiredMagnitude = desiredDriveVector.getNorm();
+    double projectedMagnitude = dotProduct / desiredMagnitude;
+
+    // Adjust drive motor power based on projected component
+    double adjustedLeftY = projectedMagnitude * (desiredDriveVector.getX() / desiredMagnitude);
+    double adjustedLeftX = projectedMagnitude * (desiredDriveVector.getY() / desiredMagnitude);
+
+    m_swerveDrive.drive(adjustedLeftY, adjustedLeftX, rightX, true, false);
   }
 
   /**
