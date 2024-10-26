@@ -33,7 +33,7 @@ if [ ! -d "$HOME/wpilib/${VERSION%%.*}" ]; then
     cd ~/wpilib/$YEAR/tools/ && sudo python3 ToolsUpdater.py
 
     # Install VS Code extensions
-    cd ~/wpilib/$YEAR/vsCodeExtensions && sudo find . -name "*.vsix" | sudo xargs -I {} code --install-extension {}
+    cd ~/wpilib/$YEAR/vsCodeExtensions && sudo find . -name "*.vsix" | xargs -I {} code --install-extension {}
 else
     echo "WPILib is already set up"
 fi
