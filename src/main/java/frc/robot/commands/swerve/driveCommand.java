@@ -113,11 +113,11 @@ public class driveCommand extends Command {
     // Project current drive vector onto desired drive vector
     double dotProduct = currentDriveVector.getX() * desiredDriveVector.getX() + currentDriveVector.getY() * desiredDriveVector.getY();
     double desiredMagnitude = desiredDriveVector.getNorm();
-    double projectedMagnitude = dotProduct / desiredMagnitude;
+    double projectedMagnitude = (desiredMagnitude > 0) ? (dotProduct / desiredMagnitude) : 0;
 
     // Adjust drive motor power based on projected component
-    double adjustedLeftY = projectedMagnitude * (desiredDriveVector.getX() / desiredMagnitude);
-    double adjustedLeftX = projectedMagnitude * (desiredDriveVector.getY() / desiredMagnitude);
+    double adjustedLeftY = (desiredMagnitude > 0) ? (projectedMagnitude * (desiredDriveVector.getX() / desiredMagnitude)) : 0;
+    double adjustedLeftX = (desiredMagnitude > 0) ? (projectedMagnitude * (desiredDriveVector.getY() / desiredMagnitude)) : 0;
 
     m_swerveDrive.drive(adjustedLeftY, adjustedLeftX, rightX, true, false);
   }
