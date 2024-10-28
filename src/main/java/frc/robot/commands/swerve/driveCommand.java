@@ -85,7 +85,7 @@ public class driveCommand extends Command {
     } else {
       if (!isRotInput) {
         timer.start();
-        if (timer.hasElapsed(1.5)) {
+        if (timer.hasElapsed(0.3)) {
           targetHeading = m_swerveDrive.getHeading();
           rotationPIDController.setSetpoint(targetHeading);
           isRotInput = true;
