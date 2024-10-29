@@ -100,12 +100,15 @@ public class driveCommand extends Command {
       }
     }
 
-    // Calculate current drive vector
+    // Calculate current drive vector using all module states
     SwerveModuleState[] currentStates = m_swerveDrive.getModuleStates();
-    Translation2d currentDriveVector = new Translation2d(
-        currentStates[0].speedMetersPerSecond * Math.cos(currentStates[0].angle.getRadians()),
-        currentStates[0].speedMetersPerSecond * Math.sin(currentStates[0].angle.getRadians())
-    );
+    Translation2d currentDriveVector = new Translation2d(0, 0);
+    for (SwerveModuleState state : currentStates) {
+      currentDriveVector = currentDriveVector.plus(new Translation2d(
+          state.speedMetersPerSecond * Math.cos(state.angle.getRadians()),
+          state.speedMetersPerSecond * Math.sin(state.angle.getRadians())
+      ));
+    }
 
     // Calculate desired drive vector
     Translation2d desiredDriveVector = new Translation2d(leftY, leftX);
@@ -116,8 +119,8 @@ public class driveCommand extends Command {
     double projectedMagnitude = (desiredMagnitude > 0) ? (dotProduct / desiredMagnitude) : 0;
 
     // Adjust drive motor power based on projected component
-    double adjustedLeftY = (desiredMagnitude > 0) ? (projectedMagnitude * (desiredDriveVector.getX() / desiredMagnitude)) : 0;
-    double adjustedLeftX = (desiredMagnitude > 0) ? (projectedMagnitude * (desiredDriveVector.getY() / desiredMagnitude)) : 0;
+    double adjustedLeftY = (desiredMagnitude > 0) ? (projectedMagnitude * (desiredDriveVector.getY() / desiredMagnitude)) : 0;
+    double adjustedLeftX = (desiredMagnitude > 0) ? (projectedMagnitude * (desiredDriveVector.getX() / desiredMagnitude)) : 0;
 
     m_swerveDrive.drive(adjustedLeftY, adjustedLeftX, rightX, true, false);
   }
