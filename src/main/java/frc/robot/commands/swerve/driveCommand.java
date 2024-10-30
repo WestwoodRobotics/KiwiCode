@@ -111,7 +111,7 @@ public class driveCommand extends Command {
     }
 
     // Calculate desired drive vector
-    Translation2d desiredDriveVector = new Translation2d(leftY, leftX);
+    Translation2d desiredDriveVector = new Translation2d(leftX, leftY);
 
     // Project current drive vector onto desired drive vector
     double dotProduct = currentDriveVector.getX() * desiredDriveVector.getX() + currentDriveVector.getY() * desiredDriveVector.getY();
@@ -122,7 +122,7 @@ public class driveCommand extends Command {
     double adjustedLeftY = (desiredMagnitude > 0) ? (projectedMagnitude * (desiredDriveVector.getY() / desiredMagnitude)) : 0;
     double adjustedLeftX = (desiredMagnitude > 0) ? (projectedMagnitude * (desiredDriveVector.getX() / desiredMagnitude)) : 0;
 
-    m_swerveDrive.drive(adjustedLeftY, adjustedLeftX, rightX, true, false);
+    m_swerveDrive.drive(adjustedLeftX, adjustedLeftY, rightX, true, false);
   }
 
   /**
