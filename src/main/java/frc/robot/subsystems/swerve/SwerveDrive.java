@@ -346,4 +346,17 @@ SmartDashboard.putNumber("module velocity ref", swerveModuleStates[1].speedMeter
   public void toggleSlowMode(){
     isSlowMode = !(isSlowMode);
   }
+  /**
+   * Gets the current states of all swerve modules.
+   * 
+   * @return An array of SwerveModuleState objects representing the current states of the swerve modules.
+   */
+  public SwerveModuleState[] getModuleStates() {
+    return new SwerveModuleState[] {
+        frontLeftSwerveModule.getState(),
+        frontRightSwerveModule.getState(),
+        rearLeftSwerveModule.getState(),
+        rearRightSwerveModule.getState()
+    };
+  }
 }

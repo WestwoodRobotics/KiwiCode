@@ -8,6 +8,8 @@ import frc.robot.Constants;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.subsystems.swerve.SwerveDrive;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 
 /**
  * The driveCommand class is responsible for controlling the swerve drive subsystem using an Xbox controller.
@@ -97,8 +99,36 @@ public class driveCommand extends Command {
         rightX = rotationPIDController.calculate(m_swerveDrive.getHeading());
       }
     }
+    
+    // Calculate current drive vector using all module states
+    SwerveModuleState[] currentStates = m_swerveDrive.getModuleStates();
+    Translation2d currentDriveVector = new Translation2d(0, 0);
+    for (SwerveModuleState state : currentStates) {
+        currentDriveVector = currentDriveVector.plus(new Translation2d(
+            state.speedMetersPerSecond * Math.cos(state.angle.getRadians()),
+            state.speedMetersPerSecond * Math.sin(state.angle.getRadians())
+        ));
+    }
 
-    m_swerveDrive.drive(leftY, leftX, rightX, true, false);
+    // Calculate desired drive vector
+    Translation2d desiredDriveVector = new Translation2d(leftX, leftY);
+
+    // Calculate similarity factor based on wheel alignments
+    double similarityFactor = 0.0;
+    for (SwerveModuleState state : currentStates) {
+        double desiredAngle = Math.atan2(desiredDriveVector.getY(), desiredDriveVector.getX());
+        double currentAngle = state.angle.getRadians();
+        double angleDifference = Math.cos(desiredAngle - currentAngle);
+        similarityFactor += Math.max(0.0, angleDifference); // Ensure non-negative
+    }
+    similarityFactor /= currentStates.length; // Average similarity
+
+    // Adjust drive power based on similarity factor
+    double adjustedLeftX = leftX * similarityFactor;
+    double adjustedLeftY = leftY * similarityFactor;
+
+    // Drive the robot with adjusted inputs
+    m_swerveDrive.drive(adjustedLeftX, adjustedLeftY, rightX, true, false);
   }
 
   /**
