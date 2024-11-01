@@ -13,7 +13,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build Robot Code
-        run: ./gradlew build
+        run: ./gradlew clean build
     
       - name: Simulate Robot Code
         run: |

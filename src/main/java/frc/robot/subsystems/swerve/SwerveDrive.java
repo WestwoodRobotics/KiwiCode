@@ -198,7 +198,7 @@ public class SwerveDrive extends SubsystemBase {
     frontRightSwerveModule.setDesiredState(swerveModuleStates[1]);
     rearLeftSwerveModule.setDesiredState(swerveModuleStates[2]);
     rearRightSwerveModule.setDesiredState(swerveModuleStates[3]);
-SmartDashboard.putNumber("module velocity ref", swerveModuleStates[1].speedMetersPerSecond);
+    SmartDashboard.putNumber("module velocity ref", swerveModuleStates[1].speedMetersPerSecond);
   }
 
   /**
