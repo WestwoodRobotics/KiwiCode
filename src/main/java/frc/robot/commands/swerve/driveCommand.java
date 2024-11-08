@@ -45,7 +45,7 @@ public class driveCommand extends Command {
     slowMode = false;
     isRotInput = true;
     rotationPIDController = new PIDController(Constants.DriveConstants.kP, Constants.DriveConstants.kI, Constants.DriveConstants.kD);
-    rotationPIDController.setTolerance(5);
+    rotationPIDController.setTolerance(10);
     targetHeading = m_swerveDrive.getHeading();
     rotationPIDController.setSetpoint(targetHeading);
   }
@@ -97,7 +97,7 @@ public class driveCommand extends Command {
         rightX = rotationPIDController.calculate(m_swerveDrive.getHeading());
       }
     }
-
+    
     m_swerveDrive.drive(leftY, leftX, rightX, true, false);
   }
 

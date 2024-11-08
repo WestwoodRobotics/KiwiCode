@@ -59,9 +59,9 @@ public final class Constants {
     public static final double slowModeMultiplier = 0.25;
 
     // PID constants for the new PIDController in the driveCommand class
-    public static final double kP = 0.006;
+    public static final double kP = 0.015;
     public static final double kI = 0.0;
-    public static final double kD = 0.0;
+    public static final double kD = 0.0005;
   }
 
   public static final class PortConstants{
