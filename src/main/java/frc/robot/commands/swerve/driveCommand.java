@@ -1,11 +1,13 @@
 package frc.robot.commands.swerve;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.subsystems.swerve.SwerveDrive;
+import edu.wpi.first.math.controller.PIDController;
 
 /**
  * The driveCommand class is responsible for controlling the swerve drive subsystem using an Xbox controller.
@@ -17,6 +19,10 @@ public class driveCommand extends Command {
   private XboxController controller;
   private boolean slowMode;
   private boolean isYuMode;
+  private PIDController rotationPIDController;
+  private double targetHeading;
+  private boolean isRotInput;
+  private Timer timer;
 
   /**
    * Constructs a new driveCommand.
@@ -27,6 +33,7 @@ public class driveCommand extends Command {
   public driveCommand(SwerveDrive swerveDrive, XboxController controller) {
     m_swerveDrive = swerveDrive;
     this.controller = controller;
+    timer = new Timer();
     addRequirements(swerveDrive);
   }
 
@@ -36,6 +43,11 @@ public class driveCommand extends Command {
   @Override
   public void initialize() {
     slowMode = false;
+    isRotInput = true;
+    rotationPIDController = new PIDController(Constants.DriveConstants.kP, Constants.DriveConstants.kI, Constants.DriveConstants.kD);
+    rotationPIDController.setTolerance(5);
+    targetHeading = m_swerveDrive.getHeading();
+    rotationPIDController.setSetpoint(targetHeading);
   }
 
   /**
@@ -64,6 +76,26 @@ public class driveCommand extends Command {
       leftX *= Constants.DriveConstants.slowModeMultiplier;
       leftY *= Constants.DriveConstants.slowModeMultiplier;
       rightX *= Constants.DriveConstants.slowModeMultiplier;
+    }
+
+    if (Math.abs(rightX) > 0) {
+      isRotInput = false;
+      timer.reset();
+      timer.stop();
+    } else {
+      if (!isRotInput) {
+        timer.start();
+        if (timer.hasElapsed(0.3)) {
+          targetHeading = m_swerveDrive.getHeading();
+          rotationPIDController.setSetpoint(targetHeading);
+          isRotInput = true;
+          timer.reset();
+          timer.stop();
+        }
+      }
+      if (isRotInput) {
+        rightX = rotationPIDController.calculate(m_swerveDrive.getHeading());
+      }
     }
 
     m_swerveDrive.drive(leftY, leftX, rightX, true, false);

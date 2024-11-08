@@ -2,23 +2,10 @@
 
 echo "Post-create script starting..."
 
-# Check if wget is installed
-if ! command -v wget &> /dev/null
-then
-    echo "wget could not be found, installing..."
-    sudo apt update && apt install -y wget
-else
-    sudo echo "wget is already installed"
-fi
-
-# Check if openjdk-21-jre is installed
-if ! dpkg -l | grep -q openjdk-21-jre
-then
-    echo "openjdk-21-jre could not be found, installing..."
-    sudo apt install -y openjdk-21-jre
-else
-    sudo echo "openjdk-21-jre is already installed"
-fi
+# Install OpenJDK 21
+echo "Installing OpenJDK 21..."
+sudo apt-get update
+sudo apt-get install -y openjdk-21-jre
 
 # Extract year and version from the URL
 URL="https://packages.wpilib.workers.dev/installer/v2024.3.2/Linux/WPILib_Linux-2024.3.2.tar.gz"
@@ -43,14 +30,10 @@ if [ ! -d "$HOME/wpilib/${VERSION%%.*}" ]; then
     sudo mv ${VERSION%%.*} ~/wpilib
     sudo rm -rf WPILib_Linux-*
     # Run ToolsUpdater.py
-    sudo cd ~/wpilib/$YEAR/tools/ && sudo python3 ToolsUpdater.py
+    cd ~/wpilib/$YEAR/tools/ && sudo python3 ToolsUpdater.py
 
     # Install VS Code extensions
-    sudo cd ~/wpilib/$YEAR/vsCodeExtensions && sudo find . -name "*.vsix" | sudo xargs -I {} code --install-extension {}
-
-
+    cd ~/wpilib/$YEAR/vsCodeExtensions && sudo find . -name "*.vsix" | sudo xargs -I {} code --install-extension {}
 else
     echo "WPILib is already set up"
 fi
-
-echo "Post-create script finished."
