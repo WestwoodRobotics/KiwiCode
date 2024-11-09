@@ -61,9 +61,10 @@ public class AlignAndRangeAprilTag extends Command {
     @Override
     public boolean isFinished() {
         // Command finishes when we're at the target distance and aligned
-        return LimelightHelpers.getTV(limelightName) && 
-               rotationPID.atSetpoint() && 
-               rangePID.atSetpoint();
+        // return LimelightHelpers.getTV(limelightName) && 
+        //        rotationPID.atSetpoint() && 
+        //        rangePID.atSetpoint();
+        return false;
     }
 
     @Override
