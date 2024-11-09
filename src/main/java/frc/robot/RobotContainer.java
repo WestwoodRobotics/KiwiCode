@@ -28,6 +28,8 @@ import frc.robot.commands.ODCommandFactory;
 import frc.robot.commands.preRoller.preRollerSenseCommand;
 import frc.robot.commands.shooter.shooterPIDCommand;
 import frc.robot.commands.swerve.driveCommand;
+import frc.robot.commands.swerve.SeekAndTrackRotOnly;
+import frc.robot.commands.swerve.AlignAndRangeAprilTag;
 import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.preRoller;
 import frc.robot.subsystems.intake.Intake;
@@ -123,6 +125,11 @@ public class RobotContainer {
     NamedCommands.registerCommand("checkAutoAndShoot", ODCommandFactory.checkAutoAndShoot());
     NamedCommands.registerCommand("resetGyro", new InstantCommand(() -> m_robotDrive.resetGyro()));
 
+    //Auto Commands
+    NamedCommands.registerCommand("LLSeekAndRotateOnly", new SeekAndTrackRotOnly(m_robotDrive, "limelight"));
+    NamedCommands.registerCommand("LLAlignAndRange", new AlignAndRangeAprilTag(m_robotDrive, "limelight"));
+     
+
     DriverStation.silenceJoystickConnectionWarning(true);
     
     // Configure default commands 
@@ -205,6 +212,7 @@ private void configureButtonBindings() {
    */
 
     public Command getAutonomousCommand() {
-      return autoChooser.getSelected();
+      //return autoChooser.getSelected();
+      return NamedCommands.getCommand("LLSeekAndRotateOnly");
     }
 }
