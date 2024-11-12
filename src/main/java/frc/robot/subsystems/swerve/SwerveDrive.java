@@ -276,7 +276,7 @@ SmartDashboard.putNumber("module velocity ref", swerveModuleStates[1].speedMeter
    * @return The heading of the robot.
    */
   public Rotation2d getHeadingObject() {
-    return gyroSubsystem != null ? gyroSubsystem.getRawRot2dYaw() : Rotation2d.fromDegrees(0);
+    return gyroSubsystem != null ? gyroSubsystem.getProcessedRot2dYaw() : Rotation2d.fromDegrees(0);
   }
 
   /**

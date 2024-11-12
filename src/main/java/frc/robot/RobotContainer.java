@@ -138,6 +138,7 @@ public class RobotContainer {
 
     autoChooser = AutoBuilder.buildAutoChooser();
 
+
     //if in auto set the default command of the shooter subsystem to be the shooterPIDCommand
 
 
@@ -214,6 +215,9 @@ private void configureButtonBindings() {
       //return autoChooser.getSelected();
       //return NamedCommands.getCommand("LLAlignHorizontally");
       this.m_robotDrive.gyroSubsystem.setGyroYawOffset(m_robotDrive.gyroSubsystem.getGyroHeadingFromPathPlannerAuto(autoChooser.getSelected().getName()));
+    //   while (0 == 0){
+    //     System.out.println("Yaw Offset: " + m_robotDrive.gyroSubsystem.getProcessedRot2dYaw().getDegrees());
+    //   }
       return autoChooser.getSelected();
     }
 }

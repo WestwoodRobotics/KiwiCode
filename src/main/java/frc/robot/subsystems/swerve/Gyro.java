@@ -87,7 +87,7 @@ public class Gyro extends SubsystemBase {
    * @return The raw yaw angle as a Rotation2d object.
    */
   public Rotation2d getRawRot2dYaw() {
-    return Rotation2d.fromDegrees(gyroSensor.getXAngle());
+    return Rotation2d.fromDegrees(gyroSensor.getZAngle());
   }
 
   /**
@@ -103,7 +103,7 @@ public class Gyro extends SubsystemBase {
    * @return The raw roll angle as a Rotation2d object.
    */
   public Rotation2d getRawRot2dRoll() {
-    return Rotation2d.fromDegrees(gyroSensor.getZAngle());
+    return Rotation2d.fromDegrees(gyroSensor.getXAngle());
   }
 
   /**
@@ -112,6 +112,8 @@ public class Gyro extends SubsystemBase {
   public void resetYaw(){
     gyroSensor.reset();
   }
+
+
 
   /**
    * Gets the angular rate around the Z-axis.
