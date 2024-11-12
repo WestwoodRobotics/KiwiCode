@@ -66,6 +66,7 @@ public class AprilTagFollow extends Command {
                     this.state = TrackingState.LOCKED_ON;
 
                 }
+                
             break;
             case TARGET_LOST:
                 if (timer.hasElapsed(lostTimeOut)){
@@ -76,6 +77,7 @@ public class AprilTagFollow extends Command {
                     this.state = TrackingState.LOCKED_ON;
                 }
                 swerve.drive(0,0,0,true, false);
+
             break;
             case LOCKED_ON:
                 if (!LimelightHelpers.getTV(limelightName)) {

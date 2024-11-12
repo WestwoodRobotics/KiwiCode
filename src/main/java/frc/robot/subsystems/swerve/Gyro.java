@@ -1,5 +1,7 @@
 package frc.robot.subsystems.swerve;
 
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.sensors.NeoADIS16470;
@@ -150,5 +152,10 @@ public class Gyro extends SubsystemBase {
     this.gyroYawOffset = new Rotation2d(0);
     this.gyroRollOffset = new Rotation2d(0);
     this.gyroPitchOffset = new Rotation2d(0);
+  }
+
+  public double getGyroHeadingFromPathPlannerAuto(String auto){
+    //Get the starting heading from PathPlanner Auto 
+    return PathPlannerAuto.getStaringPoseFromAutoFile(auto).getRotation().getDegrees();
   }
 }

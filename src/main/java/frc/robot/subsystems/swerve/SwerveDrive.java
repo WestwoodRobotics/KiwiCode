@@ -33,7 +33,7 @@ import edu.wpi.first.wpilibj.DriverStation;
  */
 public class SwerveDrive extends SubsystemBase {
 
-  private Gyro gyroSubsystem;
+  public Gyro gyroSubsystem;
   private boolean isSlowMode;
 
   // Swerve modules
