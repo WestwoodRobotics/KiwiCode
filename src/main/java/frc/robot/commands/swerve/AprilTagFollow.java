@@ -61,7 +61,7 @@ public class AprilTagFollow extends Command {
     public void execute() {
         switch(this.state) {
             case SEARCHING:
-                swerve.drive(0, 0, 0, true, false);
+                swerve.drive(0, 0, -0.1, true, false);
                 if (LimelightHelpers.getTV(limelightName)) {
                     this.state = TrackingState.LOCKED_ON;
 

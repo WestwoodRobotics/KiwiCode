@@ -214,7 +214,7 @@ private void configureButtonBindings() {
     public Command getAutonomousCommand() {
       //return autoChooser.getSelected();
       //return NamedCommands.getCommand("LLAlignHorizontally");
-      this.m_robotDrive.gyroSubsystem.setGyroYawOffset(m_robotDrive.gyroSubsystem.getGyroHeadingFromPathPlannerAuto(autoChooser.getSelected().getName()));
+      //this.m_robotDrive.gyroSubsystem.setGyroYawOffset(m_robotDrive.gyroSubsystem.getGyroHeadingFromPathPlannerAuto(autoChooser.getSelected().getName())+90);
     //   while (0 == 0){
     //     System.out.println("Yaw Offset: " + m_robotDrive.gyroSubsystem.getProcessedRot2dYaw().getDegrees());
     //   }
