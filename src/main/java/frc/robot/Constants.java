@@ -222,5 +222,17 @@ public final class Constants {
     public static final boolean debugMode = true;
   }
   
+  public static final class AxeConstants {
+    public static final int kAxeMotorPort = 20;
+
+    public static final double kP = 0.0002;
+    public static final double kI = 0;
+    public static final double kD = 0;
+
+    // figure these out
+    public static final int kAxeDownPosition = 0;
+    public static final int kAxeUpPosition = 0;
+  }
+  
   
 }
