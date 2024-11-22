@@ -4,6 +4,8 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
+import java.sql.Driver;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -199,13 +201,15 @@ private void configureButtonBindings() {
 
     //DriverLeftBumper.onTrue(new InstantCommand(() -> m_shooter.setShooterPower(-0.15), m_shooter).alongWith(new InstantCommand(() -> m_preRoller.setPreRollerPower(-1), m_preRoller)));
     //DriverLeftBumper.onFalse(new InstantCommand(() -> m_shooter.setShooterPower(0), m_shooter).alongWith(new InstantCommand(() -> m_preRoller.setPreRollerPower(0), m_preRoller)));
-    DriverDPadLeft.onTrue(new InstantCommand(()-> m_robotDrive.toggleYuMode()));
+    //DriverDPadLeft.onTrue(new InstantCommand(()-> m_robotDrive.toggleYuMode()));
+    DriverDPadLeft.onTrue(new InstantCommand(() -> m_axe.resetEncoder()));
 
     //axe
     DriverRightBumper.onTrue(new AxePIDCommand(m_axe, AxeConstants.kAxeUpPosition));
     DriverLeftBumper.onTrue(new AxePIDCommand(m_axe, AxeConstants.kAxeDownPosition));
 
     /*
+
      * OPERATOR BUTTON MAPPING
      */
   }

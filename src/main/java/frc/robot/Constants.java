@@ -198,7 +198,7 @@ public final class Constants {
 
   public static final class ShooterConstants {
     public static final int kTopRollerPort = 21 ; //TODO: Change this value
-    public static final int kBottomRollerPort = 20; //TODO: Change this value
+    public static final int kBottomRollerPort = 50; //TODO: Change this value
     public static final int kPreRollerPort = 22; //TODO: Change this value
     public static final double kTopRollerRPMConversionFactor = 1.0;
     public static final double kBottomRollerRPMConversionFactor = 1.0;
@@ -225,13 +225,13 @@ public final class Constants {
   public static final class AxeConstants {
     public static final int kAxeMotorPort = 20;
 
-    public static final double kP = 0.0002;
+public static final double kP = .15;
     public static final double kI = 0;
     public static final double kD = 0;
 
     // figure these out
-    public static final int kAxeDownPosition = 0;
-    public static final int kAxeUpPosition = 0;
+    public static final double kAxeDownPosition = 31;
+    public static final double kAxeUpPosition = 0;
   }
   
   
