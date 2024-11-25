@@ -8,7 +8,8 @@ sudo apt-get update
 sudo apt-get install -y openjdk-21-jre
 
 # Extract year and version from the URL
-URL="https://packages.wpilib.workers.dev/installer/v2024.3.2/Linux/WPILib_Linux-2024.3.2.tar.gz"
+URL="https://packages.wpilib.workers.dev/installer/v2025.1.1-beta-2/Linux/WPILib_Linux-2025.1.1-beta-2.tar.gz"
+
 VERSION=$(echo $URL | grep -oP 'v\K[0-9]{4}\.[0-9]+\.[0-9]+')
 YEAR=${VERSION%%.*}
 
