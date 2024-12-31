@@ -4,6 +4,8 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
+import java.sql.Driver;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -23,15 +25,18 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.AxeConstants;
 import frc.robot.Constants.PortConstants;
 import frc.robot.commands.ODCommandFactory;
+import frc.robot.commands.axe.AxePIDCommand;
 import frc.robot.commands.preRoller.preRollerSenseCommand;
 import frc.robot.commands.shooter.shooterPIDCommand;
-import frc.robot.commands.swerve.driveCommand;
 import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.preRoller;
+import frc.robot.subsystems.axe.Axe;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.swerve.SwerveDrive;
+import frc.robot.commands.swerve.*;
 
 
 
@@ -48,6 +53,7 @@ public class RobotContainer {
   private final Intake m_intake = new Intake();
   private final preRoller m_preRoller = new preRoller();
   protected final Shooter m_shooter = new Shooter(false);
+  protected final Axe m_axe = new Axe();
   private final SendableChooser<Command> autoChooser;
 
 
@@ -123,6 +129,12 @@ public class RobotContainer {
     NamedCommands.registerCommand("checkAutoAndShoot", ODCommandFactory.checkAutoAndShoot());
     NamedCommands.registerCommand("resetGyro", new InstantCommand(() -> m_robotDrive.resetGyro()));
 
+    //Auto Commands
+    NamedCommands.registerCommand("LLSeekAndRotateOnly", new SeekAndTrackRotOnly(m_robotDrive, "limelight"));
+    NamedCommands.registerCommand("LLAlignAndRange", new AlignAndRangeAprilTag(m_robotDrive, "limelight"));
+    NamedCommands.registerCommand("LLAlignHorizontally", new AprilTagFollow(m_robotDrive, "limelight"));
+     
+
     DriverStation.silenceJoystickConnectionWarning(true);
     
     // Configure default commands 
@@ -131,6 +143,7 @@ public class RobotContainer {
     m_robotDrive.setDefaultCommand(new driveCommand(m_robotDrive, m_driverController));
 
     autoChooser = AutoBuilder.buildAutoChooser();
+
 
     //if in auto set the default command of the shooter subsystem to be the shooterPIDCommand
 
@@ -161,8 +174,8 @@ private void configureButtonBindings() {
         () -> m_robotDrive.resetGyro(),
         m_robotDrive));
 
-    driverLeftTrigger.onTrue(ODCommandFactory.intakeSenseCommand());
-    driverLeftTrigger.onFalse(ODCommandFactory.stopIntakeSenseCommand());
+    //driverLeftTrigger.onTrue(ODCommandFactory.intakeSenseCommand());
+    //driverLeftTrigger.onFalse(ODCommandFactory.stopIntakeSenseCommand());
 
     driverRightTrigger.onTrue(ODCommandFactory.revUpShooter());
     driverRightTrigger.onFalse(ODCommandFactory.stopShooterCommand());
@@ -177,8 +190,8 @@ private void configureButtonBindings() {
     // DriverBButton.onFalse(new InstantCommand(() -> m_preRoller.setPreRollerPower(0), m_preRoller));
     DriverBButton.onTrue(ODCommandFactory.intakeSenseCommand());
     DriverBButton.onFalse(ODCommandFactory.stopPreRollerCommand().alongWith(ODCommandFactory.stopIntakeCommand()));
-    DriverRightBumper.onTrue(new InstantCommand(() -> m_robotDrive.toggleSlowMode()));
-    DriverRightBumper.onFalse(new InstantCommand(() -> m_robotDrive.toggleSlowMode()));
+    driverLeftTrigger.onTrue(new InstantCommand(() -> m_robotDrive.toggleSlowMode()));
+    driverLeftTrigger.onFalse(new InstantCommand(() -> m_robotDrive.toggleSlowMode()));
 
     DriverAButton.onTrue(new InstantCommand(() -> m_intake.setIntakePower(0.5), m_intake));
     DriverAButton.onFalse(new InstantCommand(() -> m_intake.setIntakePower(0), m_intake));
@@ -186,12 +199,17 @@ private void configureButtonBindings() {
     ), m_intake));
     DriverYButton.onFalse(new InstantCommand(() -> m_intake.setIntakePower(0), m_intake));
 
-    DriverLeftBumper.onTrue(new InstantCommand(() -> m_shooter.setShooterPower(-0.15), m_shooter).alongWith(new InstantCommand(() -> m_preRoller.setPreRollerPower(-1), m_preRoller)));
-    DriverLeftBumper.onFalse(new InstantCommand(() -> m_shooter.setShooterPower(0), m_shooter).alongWith(new InstantCommand(() -> m_preRoller.setPreRollerPower(0), m_preRoller)));
-    DriverDPadLeft.onTrue(new InstantCommand(()-> m_robotDrive.toggleYuMode()));
+    //DriverLeftBumper.onTrue(new InstantCommand(() -> m_shooter.setShooterPower(-0.15), m_shooter).alongWith(new InstantCommand(() -> m_preRoller.setPreRollerPower(-1), m_preRoller)));
+    //DriverLeftBumper.onFalse(new InstantCommand(() -> m_shooter.setShooterPower(0), m_shooter).alongWith(new InstantCommand(() -> m_preRoller.setPreRollerPower(0), m_preRoller)));
+    //DriverDPadLeft.onTrue(new InstantCommand(()-> m_robotDrive.toggleYuMode()));
+    DriverDPadLeft.onTrue(new InstantCommand(() -> m_axe.resetEncoder()));
 
+    //axe
+    DriverRightBumper.onTrue(new AxePIDCommand(m_axe, AxeConstants.kAxeUpPosition));
+    DriverLeftBumper.onTrue(new AxePIDCommand(m_axe, AxeConstants.kAxeDownPosition));
 
     /*
+
      * OPERATOR BUTTON MAPPING
      */
   }
@@ -205,6 +223,12 @@ private void configureButtonBindings() {
    */
 
     public Command getAutonomousCommand() {
+      //return autoChooser.getSelected();
+      //return NamedCommands.getCommand("LLAlignHorizontally");
+      //this.m_robotDrive.gyroSubsystem.setGyroYawOffset(m_robotDrive.gyroSubsystem.getGyroHeadingFromPathPlannerAuto(autoChooser.getSelected().getName())+90);
+    //   while (0 == 0){
+    //     System.out.println("Yaw Offset: " + m_robotDrive.gyroSubsystem.getProcessedRot2dYaw().getDegrees());
+    //   }
       return autoChooser.getSelected();
     }
 }

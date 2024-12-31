@@ -3,6 +3,7 @@ package frc.robot.commands.swerve;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.Constants.ControllerConstants;
@@ -34,7 +35,9 @@ public class driveCommand extends Command {
     m_swerveDrive = swerveDrive;
     this.controller = controller;
     timer = new Timer();
+    
     addRequirements(swerveDrive);
+
   }
 
   /**
@@ -99,6 +102,7 @@ public class driveCommand extends Command {
     }
 
     m_swerveDrive.drive(leftY, leftX, rightX, true, false);
+    //controller.setRumble(RumbleType.kBothRumble, leftY > 0 ? 1 : 0);
   }
 
   /**
@@ -107,7 +111,9 @@ public class driveCommand extends Command {
    * @param interrupted Whether the command was interrupted.
    */
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    controller.setRumble(RumbleType.kBothRumble, 0);
+  }
 
   /**
    * Toggles the Yu mode.

@@ -1,5 +1,7 @@
 package frc.robot.subsystems.swerve;
 
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.sensors.NeoADIS16470;
@@ -85,7 +87,7 @@ public class Gyro extends SubsystemBase {
    * @return The raw yaw angle as a Rotation2d object.
    */
   public Rotation2d getRawRot2dYaw() {
-    return Rotation2d.fromDegrees(gyroSensor.getXAngle());
+    return Rotation2d.fromDegrees(gyroSensor.getZAngle());
   }
 
   /**
@@ -101,7 +103,7 @@ public class Gyro extends SubsystemBase {
    * @return The raw roll angle as a Rotation2d object.
    */
   public Rotation2d getRawRot2dRoll() {
-    return Rotation2d.fromDegrees(gyroSensor.getZAngle());
+    return Rotation2d.fromDegrees(gyroSensor.getXAngle());
   }
 
   /**
@@ -110,6 +112,8 @@ public class Gyro extends SubsystemBase {
   public void resetYaw(){
     gyroSensor.reset();
   }
+
+
 
   /**
    * Gets the angular rate around the Z-axis.
@@ -150,5 +154,10 @@ public class Gyro extends SubsystemBase {
     this.gyroYawOffset = new Rotation2d(0);
     this.gyroRollOffset = new Rotation2d(0);
     this.gyroPitchOffset = new Rotation2d(0);
+  }
+
+  public double getGyroHeadingFromPathPlannerAuto(String auto){
+    //Get the starting heading from PathPlanner Auto 
+    return PathPlannerAuto.getStaringPoseFromAutoFile(auto).getRotation().getDegrees();
   }
 }

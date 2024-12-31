@@ -59,9 +59,9 @@ public final class Constants {
     public static final double slowModeMultiplier = 0.25;
 
     // PID constants for the new PIDController in the driveCommand class
-    public static final double kP = 0.006;
+    public static final double kP = 0.015;
     public static final double kI = 0.0;
-    public static final double kD = 0.0;
+    public static final double kD = 0.0005;
   }
 
   public static final class PortConstants{
@@ -198,7 +198,7 @@ public final class Constants {
 
   public static final class ShooterConstants {
     public static final int kTopRollerPort = 21 ; //TODO: Change this value
-    public static final int kBottomRollerPort = 20; //TODO: Change this value
+    public static final int kBottomRollerPort = 50; //TODO: Change this value
     public static final int kPreRollerPort = 22; //TODO: Change this value
     public static final double kTopRollerRPMConversionFactor = 1.0;
     public static final double kBottomRollerRPMConversionFactor = 1.0;
@@ -220,6 +220,18 @@ public final class Constants {
 
   public static final class UtilityConstants {
     public static final boolean debugMode = true;
+  }
+  
+  public static final class AxeConstants {
+    public static final int kAxeMotorPort = 20;
+
+public static final double kP = .15;
+    public static final double kI = 0;
+    public static final double kD = 0;
+
+    // figure these out
+    public static final double kAxeDownPosition = 31;
+    public static final double kAxeUpPosition = 0;
   }
   
   
